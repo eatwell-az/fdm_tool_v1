@@ -1,0 +1,12 @@
+@import '../../styles/layout';
+@import '../../styles/colors';
+
+#header-col-right {
+    padding: $pad-m;
+
+    .header-select, .header-input{
+        /* @include header-input-select; */
+    }
+
+    @include input-selector;
+}

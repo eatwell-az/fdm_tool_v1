@@ -1,0 +1,37 @@
+$rounded-medium: 20px;
+
+$pad-m: 15px;
+$pad-xl: 50px;
+
+$app-width: 1200px;
+
+@mixin header-input-select {
+    background-color: $primary-foreground;
+    max-width: 95%;
+}
+
+@mixin input-selector {
+    
+    /deep/ .mat-form-field-outline {
+        background-color: white;
+        border-radius: 5px;
+    }
+
+    /deep/ mat-label {
+        color: #ff0;
+        background-color: #000;
+    }
+
+    /deep/ .mat-form-field-empty mat-label {
+        color: #000;
+        background-color: transparent;
+    }
+
+    /deep/ .mat-select-arrow {
+        color: transparent;
+    }
+
+    .header-select {
+        background: url('../../../assets/images/baseline-expand_more-24px.svg') no-repeat transparent center right/10%;
+    }
+}

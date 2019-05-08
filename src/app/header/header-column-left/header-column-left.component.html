@@ -1,0 +1,21 @@
+<div id="header-col-left" class="header-col" fxLayout="column">
+    <mat-form-field
+      appearance="outline"
+      [hideRequiredMarker]="options.value.hideRequired"
+      [floatLabel]="options.value.floatLabel"
+    >
+      <mat-select
+        class="header-select"
+        required>
+        <mat-option>-- None --</mat-option>
+        <mat-option value="option">Option</mat-option>
+      </mat-select>
+    <mat-label><mat-icon class="input-icon">settings</mat-icon> System</mat-label>
+</mat-form-field>
+  <mat-form-field
+  appearance="outline"
+  >
+      <input matInput placeholder="Email" class="header-input">
+      <mat-hint>Errors appear instantly!</mat-hint>
+    </mat-form-field>
+</div>

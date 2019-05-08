@@ -1,0 +1,20 @@
+@import '../../styles/layout';
+@import '../../styles/colors';
+
+#header-col-left {
+    background: $primary;
+    border-top-right-radius: $rounded-medium;
+    border-top-left-radius: $rounded-medium;
+    padding: $pad-m;
+
+    @include input-selector;
+
+    .input-icon {
+        color: $accent-mid;
+    }
+
+    .header-select, .header-input {
+        /* @include header-input-select; */
+        /* background-color: #fff; */
+    }
+}

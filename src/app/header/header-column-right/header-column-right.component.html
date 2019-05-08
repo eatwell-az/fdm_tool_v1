@@ -1,0 +1,17 @@
+<div id="header-col-right" class="header-col" fxLayout="column">
+  <mat-form-field
+  appearance="outline"
+  >
+    <mat-label class="header-label">Business Process</mat-label>
+    <mat-select id="business-process" [(value)]="selected" class="header-select">
+      <mat-option>None</mat-option>
+      <mat-option value="option1">Option 1</mat-option>
+      <mat-option value="option2">Option 2</mat-option>
+      <mat-option value="option3">Option 3</mat-option>
+    </mat-select>
+    <mat-label><mat-icon class="input-icon">settings</mat-icon> System</mat-label>
+  </mat-form-field>
+  <mat-form-field>
+    <input matInput placeholder="Search" class="header-input">
+  </mat-form-field>
+</div>
