@@ -10,18 +10,18 @@ import del from 'del';
 const paths = {
   styles: {
     src: 'src/styles/**/*.scss',
-    dest: 'assets/styles/'
+    dest: 'dist/styles/'
   },
   scripts: {
     src: 'src/scripts/**/*.js',
-    dest: 'assets/scripts/'
+    dest: 'dist/scripts/'
   }
 };
  
 /*
  * For small tasks you can export arrow functions
  */
-export const clean = () => del([ 'assets' ]);
+export const clean = () => del([ 'dist' ]);
  
 /*
  * You can also declare named functions and export them as tasks

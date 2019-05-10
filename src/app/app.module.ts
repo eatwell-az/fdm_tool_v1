@@ -10,12 +10,20 @@ import { MaterialModule } from './material.module';
 import { SignupComponent } from './auth/signup/signup.component';
 import { LoginComponent } from './auth/login/login.component';
 import { AuthorComponent } from './author/author.component';
-import { WelcomeComponent } from './welcome/welcome.component';
+import { CoreComponent } from './core/core.component';
 import { HeaderColumnLeftComponent } from './header/header-column-left/header-column-left.component';
 import { HeaderColumnCenterComponent } from './header/header-column-center/header-column-center.component';
 import { HeaderColumnRightComponent } from './header/header-column-right/header-column-right.component';
 import { InputErrorStateMatcherComponent } from './forms/input-error-state-matcher/input-error-state-matcher.component';
 import { OverlayContainer } from '@angular/cdk/overlay';
+import { OutputTableComponent } from './datatable/output-table/output-table.component';
+import { InputTableComponent } from './datatable/input-table/input-table.component';
+import { DatatableComponent } from './datatable/datatable.component';
+import { InputRowComponent } from './datatable/input-table/input-row/input-row.component';
+import { InputCellComponent } from './datatable/input-table/input-row/input-cell/input-cell.component';
+import { OutputRowComponent } from './datatable/output-table/output-row/output-row.component';
+import { OutputCellComponent } from './datatable/output-table/output-row/output-cell/output-cell.component';
+import { DatatableService } from './services/datatable.service';
 
 @NgModule({
   declarations: [
@@ -23,11 +31,18 @@ import { OverlayContainer } from '@angular/cdk/overlay';
     SignupComponent,
     LoginComponent,
     AuthorComponent,
-    WelcomeComponent,
+    CoreComponent,
     HeaderColumnLeftComponent,
     HeaderColumnCenterComponent,
     HeaderColumnRightComponent,
-    InputErrorStateMatcherComponent
+    InputErrorStateMatcherComponent,
+    OutputTableComponent,
+    InputTableComponent,
+    DatatableComponent,
+    InputRowComponent,
+    InputCellComponent,
+    OutputRowComponent,
+    OutputCellComponent
   ],
   imports: [
     BrowserModule,
@@ -38,12 +53,9 @@ import { OverlayContainer } from '@angular/cdk/overlay';
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [],
+  providers: [ DatatableService ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
-  constructor(overlayContainer: OverlayContainer) {
-    overlayContainer.getContainerElement().classList.add('unicorn-dark-theme');
-    console.log(overlayContainer);
-  }
+  constructor(overlayContainer: OverlayContainer) { }
 }

@@ -1,11 +1,12 @@
-@import '../../styles/layout';
-@import '../../styles/colors';
+@import '../../../styles/layout';
+@import '../../../styles/colors';
 
 #header-col-left {
     background: $primary;
     border-top-right-radius: $rounded-medium;
     border-top-left-radius: $rounded-medium;
     padding: $pad-m;
+    margin-left: 10px;
 
     @include input-selector;
 

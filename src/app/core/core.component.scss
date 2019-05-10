@@ -1,0 +1,15 @@
+@import '../../styles/layout';
+@import '../../styles/colors';
+
+.core-grid-test {
+    margin: 50px auto;
+    display: grid;
+    width: $app-width;
+    grid-template-rows: 220px auto 380px;
+    grid-template-columns: 440px auto 380px;
+
+    .dtable-container {
+        grid-row: 2 / 3;
+        grid-column: 1 / -1;
+    }
+}
