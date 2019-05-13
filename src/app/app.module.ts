@@ -24,6 +24,7 @@ import { InputCellComponent } from './datatable/input-table/input-row/input-cell
 import { OutputRowComponent } from './datatable/output-table/output-row/output-row.component';
 import { OutputCellComponent } from './datatable/output-table/output-row/output-cell/output-cell.component';
 import { DatatableService } from './services/datatable.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { DatatableService } from './services/datatable.service';
     FlexLayoutModule,
     MaterialModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [ DatatableService ],
   bootstrap: [AppComponent]

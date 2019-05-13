@@ -7,7 +7,6 @@ import { DatatableService } from 'src/app/services/datatable.service';
   styleUrls: ['./input-table.component.scss']
 })
 export class InputTableComponent implements OnInit {
-  inputColumns: number[];
   inputRows: number[];
 
   constructor(

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DatatableService } from 'src/app/services/datatable.service';
 
 @Component({
   selector: 'app-input-cell',
@@ -6,10 +7,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./input-cell.component.scss']
 })
 export class InputCellComponent implements OnInit {
+  inputColumns: number[];
 
-  constructor() { }
+  constructor(private datatableService: DatatableService) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
 }

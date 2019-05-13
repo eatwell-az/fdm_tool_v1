@@ -1,0 +1,163 @@
+{
+  "businessProcesses": [
+    {
+      "id": 1,
+      "name": "Basel"
+    },
+    {
+      "id": 2,
+      "name": "Small Business"
+    }
+  ],
+  "systems": [
+    {
+      "id": 1,
+      "name": "ALS"
+    },
+    {
+      "id": 2,
+      "name": "AFS"
+    }
+  ],
+  "dataSets": [
+    {
+      "id": 1,
+      "name": "ALS_DAILY_FILE",
+      "type": "FILE",
+      "systems": [
+        {
+          "id": 1
+        }
+      ],
+      "fields": [
+        {
+          "id": 1001,
+          "name": "ACCOUNT_NUMBER",
+          "dataType": "CHARACTER",
+          "length": 25,
+          "businessProcesses": [
+            {
+              "id": 1
+            },
+            {
+              "id": 2
+            }
+          ]
+        },
+        {
+          "id": 1002,
+          "name": "BALANCE",
+          "dataType": "NUMERIC",
+          "length": 10,
+          "scale": 2,
+          "businessProcesses": [
+            {
+              "id": 2
+            }
+          ]
+        },
+        {
+          "id": 1003,
+          "name": "INTEREST_RATE",
+          "dataType": "NUMERIC",
+          "length": 12,
+          "scale": 4,
+          "businessProcesses": [
+            {
+              "id": 1
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "ALS_DAILY",
+      "type": "TABLE",
+      "systems": [
+        {
+          "id": 1
+        }
+      ],
+      "fields": [
+        {
+          "id": 2001,
+          "name": "ACCOUNT_NUMBER",
+          "dataType": "CHARACTER",
+          "length": 25,
+          "businessProcesses": [
+            {
+              "id": 1
+            },
+            {
+              "id": 2
+            }
+          ]
+        },
+        {
+          "id": 2002,
+          "name": "BALANCE",
+          "dataType": "NUMERIC",
+          "length": 10,
+          "scale": 2,
+          "businessProcesses": [
+            {
+              "id": 2
+            }
+          ]
+        },
+        {
+          "id": 2003,
+          "name": "INTEREST_RATE",
+          "dataType": "NUMERIC",
+          "length": 12,
+          "scale": 4,
+          "businessProcesses": [
+            {
+              "id": 1
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "mappingDocuments" :[
+    {
+      "id" : 10001,
+      "name" : "ALS Basel Processing",
+      "businessProcess" : {"id" : 1},
+      "system" : {"id": 1},
+      "steps" : [
+        {
+          "id": 1,
+          "type": "INPUT",
+          "field": {"id": 1001}
+        },
+        {
+          "id": 2,
+          "type": "CLEANSING",
+          "rule": "TRIM_SPACES",
+          "inputStep": {"id": 1}
+        },
+        {
+          "id": 3,
+          "type": "OUTPUT",
+          "field": {"id": 2001},
+          "inputStep": {"id": 2}
+        },
+        {
+          "id": 4,
+          "type": "INPUT",
+          "field": {"id": 1003}
+        },
+        {
+          "id": 5,
+          "type": "FORMULA",
+          "name": "SCALED_INTEREST_RATE",
+          "inputSteps": [{"id": 4}],
+          "formula": "INTEREST_RATE * 100"
+        }
+      ]
+    }
+  ]
+}

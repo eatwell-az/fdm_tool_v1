@@ -10,7 +10,6 @@ export class OutputCellComponent implements OnInit {
 
   constructor(private renderer: Renderer2, private elRef: ElementRef, private datatableService: DatatableService) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
 }
