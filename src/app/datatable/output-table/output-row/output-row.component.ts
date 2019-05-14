@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Field } from 'src/app/shared/model/cell.data';
 
 @Component({
   selector: 'app-output-row',
@@ -6,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./output-row.component.scss']
 })
 export class OutputRowComponent implements OnInit {
+  @Input() outputRow: Field;
 
   constructor() { }
 

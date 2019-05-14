@@ -1,5 +1,6 @@
-import { Component, OnInit, HostBinding, Renderer2, ElementRef } from '@angular/core';
+import { Component, OnInit, HostBinding, Renderer2, ElementRef, Input } from '@angular/core';
 import { DatatableService } from 'src/app/services/datatable.service';
+import { DataSet, InputRow, Field } from 'src/app/shared/model/cell.data';
 
 @Component({
   selector: 'app-input-table',
@@ -7,7 +8,9 @@ import { DatatableService } from 'src/app/services/datatable.service';
   styleUrls: ['./input-table.component.scss']
 })
 export class InputTableComponent implements OnInit {
-  inputRows: number[];
+
+  @Input() inputTable: DataSet[];
+  inputRows: Field[];
 
   constructor(
     private datatableService: DatatableService,
@@ -16,12 +19,15 @@ export class InputTableComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
+    if (this.inputTable.length > 0) {
+      for (const inputRow of this.inputTable) {
+        this.inputRows = inputRow.fields;
+      }
+    }
+
     this.renderer.setStyle(this.elRef.nativeElement, 'display', 'grid');
     this.renderer.setStyle(this.elRef.nativeElement, 'grid-template-columns', 'auto');
   }
-
-  setGridColumns() { }
-
-  inputRowClick() { }
 }
 

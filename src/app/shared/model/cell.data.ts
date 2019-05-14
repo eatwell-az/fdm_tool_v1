@@ -1,51 +1,54 @@
-import { CleanseOperation } from './cleanse.operation';
 
 export interface CellData {
     cellId: CellId;
     cellType: string;
 }
 
-abstract class Base {
-    constructor(public id: number) { }
+export interface Base {
+    id: number;
+    name: string;
 }
 
-export class BusinessProcess extends Base {
-    constructor(public id: number, public name: string) {
-        super(id);
-    }
+export interface BusinessProcess extends Base {
+    id: number;
+    name: string;
 }
 
-export class System extends Base {
-    constructor(public id: number, public name: string) {
-        super(id);
-    }
+export interface System extends Base {
+    id: number;
+    name: string;
 }
 
-export class DataSet extends Base {
-    constructor(
-        public id: number,
-        public name: string,
-        public type: string,
-        public systems: Array<System>,
-        public fields: Array<Field>
-    ) {
-        super(id);
-    }
+export interface DataSet extends Base {
+    id: number;
+    name: string;
+    type: string;
+    systems: Array<System>;
+    fields: Array<Field>;
 }
 
-export class Field extends Base {
-    constructor(
-        public id: number,
-        public name: string,
-        public dataType: string,
-        public length: number,
-        public businessProcess: Array<BusinessProcess>
-    ) {
-        super(id);
-    }
+export interface Field extends Base {
+    id: number;
+    name: string;
+    dataType: string;
+    length: number;
+    businessProcess: Array<BusinessProcess>;
 }
 
-export class InputCell extends Field implements CellData {
+export interface InputRow {
+    id: number;
+    order: number;
+}
+
+export interface InputCell extends Field {
+    id: number;
+    name: string;
+    dataType: string;
+    length: number;
+    businessProcess: Array<BusinessProcess>;
+    inCurrentColumn: boolean;
+}
+/* export class InputCell implements CellData {
 
     cellType = 'input';
     constructor(
@@ -59,9 +62,9 @@ export class InputCell extends Field implements CellData {
         super(id, name, dataType, length, businessProcess);
     }
 
-}
+} */
 
-export class OutputCell extends Field implements CellData {
+/* export class OutputCell extends Field implements CellData {
     cellType = 'input';
     constructor(
         public id: number,
@@ -73,10 +76,12 @@ export class OutputCell extends Field implements CellData {
     ) {
         super(id, name, dataType, length, businessProcess);
     }
-}
+} */
 
-export class CellId {
-    constructor(public rowId: number, public colId: number, public areaId: number) {}
+export interface CellId {
+    rowId: number;
+    colId: number;
+    areaId: number;
 }
 
 

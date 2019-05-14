@@ -1,2 +1,2 @@
-<app-input-row class="input-row"></app-input-row>
-<app-input-row class="input-row"></app-input-row>
+<app-input-row *ngFor="let inputRow of inputRows" class="input-row" [inputRow]="inputRow"></app-input-row>
+

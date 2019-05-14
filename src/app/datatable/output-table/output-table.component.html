@@ -1,2 +1,1 @@
-<app-output-row class="output-row"></app-output-row>
-<app-output-row class="output-row"></app-output-row>
+<app-output-row *ngFor="let outputRow of outputRows" class="output-row" [outputRow]="outputRow"></app-output-row>

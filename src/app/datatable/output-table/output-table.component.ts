@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, ElementRef, Renderer2 } from '@angular/core';
 import { DatatableService } from 'src/app/services/datatable.service';
+import { DataSet } from 'src/app/shared/model/cell.data';
 
 @Component({
   selector: 'app-output-table',
@@ -7,7 +8,9 @@ import { DatatableService } from 'src/app/services/datatable.service';
   styleUrls: ['./output-table.component.scss']
 })
 export class OutputTableComponent implements OnInit {
-  outputRows: number[];
+
+  @Input() outputTable: DataSet[];
+  outputRows: any;
 
   constructor(
     private datatableService: DatatableService,
@@ -16,6 +19,12 @@ export class OutputTableComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    if (this.outputTable.length > 0) {
+      for (const outputRow of this.outputTable) {
+        this.outputRows = outputRow.fields;
+      }
+    }
+
     this.renderer.setStyle(this.elRef.nativeElement, 'display', 'grid');
     this.renderer.setStyle(this.elRef.nativeElement, 'grid-template-columns', '100%');
   }

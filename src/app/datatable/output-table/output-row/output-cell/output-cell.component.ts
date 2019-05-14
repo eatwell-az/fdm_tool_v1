@@ -1,5 +1,6 @@
-import { Component, OnInit, Renderer2, ElementRef } from '@angular/core';
+import { Component, OnInit, Renderer2, ElementRef, Input } from '@angular/core';
 import { DatatableService } from 'src/app/services/datatable.service';
+import { Field } from 'src/app/shared/model/cell.data';
 
 @Component({
   selector: 'app-output-cell',
@@ -8,6 +9,7 @@ import { DatatableService } from 'src/app/services/datatable.service';
 })
 export class OutputCellComponent implements OnInit {
 
+  @Input() outputRow: Field;
   constructor(private renderer: Renderer2, private elRef: ElementRef, private datatableService: DatatableService) { }
 
   ngOnInit() { }

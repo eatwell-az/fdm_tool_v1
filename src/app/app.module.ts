@@ -3,6 +3,11 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environment';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -24,7 +29,7 @@ import { InputCellComponent } from './datatable/input-table/input-row/input-cell
 import { OutputRowComponent } from './datatable/output-table/output-row/output-row.component';
 import { OutputCellComponent } from './datatable/output-table/output-row/output-cell/output-cell.component';
 import { DatatableService } from './services/datatable.service';
-import { HttpClientModule } from '@angular/common/http';
+
 
 @NgModule({
   declarations: [
@@ -53,9 +58,9 @@ import { HttpClientModule } from '@angular/common/http';
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    !environment.production ? StoreDevtoolsModule.instrument({ maxAge: 50 }) : []
   ],
-  providers: [ DatatableService ],
+  providers: [DatatableService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
