@@ -6,5 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'semeleFTDv1';
+  title = 'Finance Data Management Tool';
 }

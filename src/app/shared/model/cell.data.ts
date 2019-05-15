@@ -32,7 +32,7 @@ export interface Field extends Base {
     name: string;
     dataType: string;
     length: number;
-    businessProcess: Array<BusinessProcess>;
+    businessProcesses: Array<BusinessProcess>;
 }
 
 export interface InputRow {

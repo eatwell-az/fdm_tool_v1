@@ -1,12 +1,60 @@
-@import '../../../styles/layout';
-@import '../../../styles/colors';
+@import '../../../styles/variables';
 
 #header-col-right {
-    padding: $pad-m;
-
-    .header-select, .header-input{
-        /* @include header-input-select; */
+    margin-left: 10px;
+    margin-top: -20px;
+    
+    @include header-select;
+    @include header-input;
+    .input-icon {
+        color: $accent-mid;
     }
 
-    @include input-selector;
+    /deep/ mat-icon.header-input-search {
+        background-color: $primary-foreground;
+        height: 40px;
+        position: relative;
+        top: -12px;
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+        color: $accent-mid;
+    }
+
+    /deep/ .mat-form-field-label {
+        color: black;
+        transform-origin: 0 0;
+        transition: transform .4s cubic-bezier(.25,.8,.25,1),color .4s cubic-bezier(.25,.8,.25,1),width .4s cubic-bezier(.25,.8,.25,1);
+
+        mat-label {
+            margin-top: 5px;
+        }
+    }
+
+    /deep/ .mat-form-field-infix {
+        padding-bottom: 5px;
+    } 
+
+    /deep/ input.header-input {
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+    }
+
+    /deep/ #header-search {
+        margin-top: -20px;
+    }
+}
+
+.output-table-header {
+    .output-table-label {
+        position: relative;
+        top: -5px;
+    }
+    margin-top: 5px;
+    background-color: $accent;
+    color: $primary-foreground;
+    height: 35px;
+    width: 337px;
+    padding: 10px 20px 0;
+    border-top-left-radius: $rounded-medium;
+    border-top-right-radius: $rounded-medium;
 }

@@ -1,12 +1,27 @@
-@import '../../styles/layout';
-@import '../../styles/colors';
+@import '../../styles/variables';
 
 .core-grid-test {
+
+    .mat-expansion-panel {
+        background-color: $accent-light;
+        /deep/ .mat-expansion-panel-body {
+            padding: 0 2px;
+        }
+
+        .mat-expansion-panel-header {
+            background-color: $accent-mid;
+            flex-direction: row-reverse;
+            text-indent: 10px;
+            max-height: 35px !important;
+        }
+    }
+
     margin: 50px auto;
     display: grid;
     width: $app-width;
-    grid-template-rows: 220px auto 380px;
+    
     grid-template-columns: 440px auto 380px;
+    grid-template-rows: 190px auto 380px;
 
     .dtable-container {
         grid-row: 2 / 3;

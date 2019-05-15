@@ -1,21 +1,28 @@
-@import '../../../styles/layout';
-@import '../../../styles/colors';
+@import '../../../styles/variables';
 
 #header-col-left {
     background: $primary;
     border-top-right-radius: $rounded-medium;
     border-top-left-radius: $rounded-medium;
     padding: $pad-m;
-    margin-left: 10px;
+    margin-left: 2px;
+    height: 210px;
 
-    @include input-selector;
+    @include header-select;
 
-    .input-icon {
-        color: $accent-mid;
+    /deep/ .mat-form-field-label {
+        color: $primary-foreground;
     }
 
-    .header-select, .header-input {
-        /* @include header-input-select; */
-        /* background-color: #fff; */
+    /deep/ .mat-form-field-wrapper {
+        padding-bottom: 5px;
     }
+
+    /deep/ .mat-form-field-empty {
+        .input-icon {
+            color: $accent-mid;
+        }
+    }
+     
+
 }

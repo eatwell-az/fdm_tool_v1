@@ -17,16 +17,11 @@ export class DatatableService {
   systems: System[] = [];
   dataSets: DataSet[] = [];
 
-  // businessProcesses: Array<BusinessProcess> = [];
-  // systems: Array<System> = [];
-  // dataSets: Array<DataSet> = [];
-
   constructor() {
     this.inputFile = this.getInputFile();
     const { businessProcesses } = this.inputFile.default;
     const { systems } = this.inputFile.default;
     const { dataSets } = this.inputFile.default;
-
     this.setBusinessProcesses(businessProcesses);
     this.setSystems(systems);
     this.setDataSet(dataSets);
@@ -52,7 +47,6 @@ export class DatatableService {
         this.businessProcesses.push(businessProcess);
       }
     }
-    // console.log(this.businessProcesses);
   }
 
   private setSystems(syst: any) {
@@ -63,7 +57,6 @@ export class DatatableService {
         this.systems.push(system);
       }
     }
-    // console.log(this.systems);
   }
 
   private setDataSet(dset: any) {
@@ -76,7 +69,6 @@ export class DatatableService {
         this.dataSets.push(dataset);
       }
     }
-    // console.log(this.dataSets);
   }
 
   private setFields(fieldSet: any) {
@@ -85,14 +77,13 @@ export class DatatableService {
 
     if (fieldCount.length > 0) {
       for (let i = 0; i < fieldCount.length; i++) {
-        const {id, name, dataType, length, businessProcess } = fieldSet[fieldCount[i]];
-        const field: Field = {id, name, dataType, length, businessProcess};
-        // const cell = new OutputCell(
+        const {id, name, dataType, length, businessProcesses } = fieldSet[fieldCount[i]];
+        const field: Field = {id, name, dataType, length, businessProcesses};
         fields.push(field);
       }
     }
     this.setCells();
-    // console.log(fields);
+
     return fields;
   }
 

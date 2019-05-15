@@ -1,0 +1,9 @@
+@import '../../../styles/variables';
+
+.header-col-c {
+    background-color: $primary;
+    width: 100%;
+    padding: 5px;
+    height: 30px;
+    box-sizing: border-box;
+}

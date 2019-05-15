@@ -1,21 +1,22 @@
 <div id="header-col-left" class="header-col" fxLayout="column">
-    <mat-form-field
-      appearance="outline"
-      [hideRequiredMarker]="options.value.hideRequired"
-      [floatLabel]="options.value.floatLabel"
-    >
+    <mat-form-field>
       <mat-select
+        id="systems-select"
         class="header-select"
+        value="selected"
         required>
-        <mat-option>-- None --</mat-option>
-        <mat-option value="option">Option</mat-option>
+        <mat-option *ngFor="let system of systems" value="{{ system.id }}">{{ system.name }}</mat-option>
       </mat-select>
     <mat-label><mat-icon class="input-icon">settings</mat-icon> System</mat-label>
 </mat-form-field>
-  <mat-form-field
-  appearance="outline"
-  >
-      <input matInput placeholder="Email" class="header-input">
-      <mat-hint>Errors appear instantly!</mat-hint>
-    </mat-form-field>
+<mat-form-field>
+<mat-select
+  class="header-select"
+  id="input-file-select"
+  value="selected"
+  required>
+  <mat-option *ngFor="let inputFile of inputs" value="{{ inputFile.id }}">{{ inputFile.name }}</mat-option>
+</mat-select>
+<mat-label><mat-icon class="input-icon">insert_drive_file</mat-icon> Input</mat-label>
+</mat-form-field>
 </div>

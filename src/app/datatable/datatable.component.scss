@@ -1,8 +1,17 @@
+@import '../../styles/variables';
+
+.dtable-header {
+    background-color: $accent;
+    height: 40px;
+}
+
 .dtable-content {
-    margin-left: 10px;
+/*     margin-left: 10px; */
     border: 1px solid;
+    box-sizing: border-box;
     background-color: white;
     display: grid;
     grid-template-columns: auto 380px;
     grid-template-rows: auto;
 }
+

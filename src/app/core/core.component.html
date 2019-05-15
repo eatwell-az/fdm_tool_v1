@@ -1,8 +1,28 @@
 <section class="main-container core-grid-test">
   <app-header-column-left class="col-l"></app-header-column-left>
-  <app-header-column-center class="col-c"></app-header-column-center>
+  <app-header-column-center class="col-c" fxLayout="row" fxLayoutAlign="center end"></app-header-column-center>
   <app-header-column-right class="col-r"></app-header-column-right>
   <div class="dtable-container">
-    <app-datatable class="dtable"></app-datatable>
+    <mat-accordion>
+      <mat-expansion-panel [expanded]="true" [ngClass]="panelContainer">
+        <mat-expansion-panel-header [ngStyle]="panelHeader">
+          <mat-panel-title>
+            DDA Instrument
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <app-datatable class="dtable"></app-datatable>
+    <mat-action-row>
+      <button mat-raised-button color="accent">1</button>
+      <button mat-raised-button color="accent">2</button>
+      <button mat-raised-button color="accent">3</button>
+    </mat-action-row><!--  -->
+      </mat-expansion-panel>
+      <mat-expansion-panel [ngClass]="panelContainer">
+        <mat-expansion-panel-header [ngStyle]="panelHeader">
+          TDA Instrument
+        </mat-expansion-panel-header>
+        <app-datatable class="dtable"></app-datatable>
+      </mat-expansion-panel>
+    </mat-accordion>   
   </div>
 </section>

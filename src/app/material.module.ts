@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSelectModule } from '@angular/material/select';
-import { OverlayContainer } from '@angular/cdk/overlay';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
     imports: [
@@ -16,7 +16,8 @@ import { OverlayContainer } from '@angular/cdk/overlay';
         MatInputModule,
         MatCheckboxModule,
         MatToolbarModule,
-        MatSelectModule
+        MatSelectModule,
+        MatExpansionModule
     ],
     exports: [
         MatButtonModule,
@@ -25,7 +26,8 @@ import { OverlayContainer } from '@angular/cdk/overlay';
         MatInputModule,
         MatCheckboxModule,
         MatToolbarModule,
-        MatSelectModule
+        MatSelectModule,
+        MatExpansionModule
     ]
 })
 export class MaterialModule {
