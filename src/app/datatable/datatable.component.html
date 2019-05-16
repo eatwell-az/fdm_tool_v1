@@ -1,7 +1,39 @@
-<form>
- <div class="dtable-header"></div> 
+<form [formGroup]="datatableForm">
   <div class="dtable-content">
-    <app-input-table class="input-grid" [inputTable]="inputTable"></app-input-table>
-    <app-output-table class="output-grid" [outputTable]="outputTable"></app-output-table>
+    <mat-drawer-container class="toolbox-container" autosize>
+      <div class="input-grid">
+        <div class="dtable-header dtable-header-input">
+          <button *ngIf="!drawerIsOpen" mat-button type="button" (click)="drawer.toggle()" class="dtable-header-tools">
+              <mat-icon>build</mat-icon>
+          </button>
+          <button *ngIf="drawerIsOpen" mat-button type="button" (click)="drawer.toggle()" class="dtable-header-tools toolbox-open">
+              <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        <div *ngFor="let inputRow of inputRows" class="input-row" [ngStyle]="inputColumn">
+          <div class="input-cell">
+            <input class="input-cell name" type="text" formControlName="{{ inputRow.name }}" value="{{ inputRow.name }}" [ngClass]="{'toolbox-open': drawerIsOpen}" readonly>
+          </div>
+        </div>
+      </div> 
+      <mat-drawer #drawer class="toolbox-sidenav" mode="side" position="end" (openedChange)="openStarted()">
+        <div class="dtable-header toolbox-controls">
+          <button mat-flat-button type="button" class="toolbox-control">
+            <mat-icon>functions</mat-icon>
+          </button> 
+          <button mat-flat-button type="button" class="toolbox-control">
+            <mat-icon>crop</mat-icon>
+          </button>           
+        </div>
+      </mat-drawer>
+    </mat-drawer-container>
+    <div class="output-grid">
+      <div class="dtable-header"></div>
+      <div *ngFor="let outputRow of outputRows" class="output-row">
+        <div class="output-cell">
+          <input class="output-cell name" type="text" value="{{ outputRow.name }}" readonly>
+        </div>
+      </div>
+    </div>
   </div>
 </form>

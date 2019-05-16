@@ -16,7 +16,7 @@ export class CoreComponent implements OnInit {
   constructor(private datatableService: DatatableService) { }
 
   ngOnInit() {
-    console.log(this.datatableService.systems);
+    // console.log(this.datatableService.systems);
   }
 
 }

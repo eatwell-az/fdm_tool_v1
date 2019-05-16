@@ -1,37 +1,81 @@
-$rounded-medium: 20px;
+$rounded-medium: 5px;
 
 $pad-m: 15px;
 $pad-xl: 50px;
 
 $app-width: 1200px;
 
-@mixin header-input-select {
-    background-color: $primary-foreground;
-    max-width: 95%;
+/deep/ mat-select {
+    margin-top: 5px;
 }
 
-@mixin input-selector {
-    
-    /deep/ .mat-form-field-outline {
-        background-color: white;
-        border-radius: 5px;
+/deep/ .mat-form-field-wrapper {
+    padding: 0px;
+}
+
+/deep/ .mat-select-panel-wrap {
+    margin-top: 10px;
+}
+
+/deep/ .mat-form-field-underline {
+    display: none;
+}
+
+/deep/ .mat-select-value {
+    position: relative;
+    top: -5px;
+}
+
+@mixin header-input {
+
+    /deep/ .mat-form-field-type-mat-input{
+        background-color: transparent;
     }
 
-    /deep/ mat-label {
-        color: #ff0;
-        background-color: #000;
+    /deep/ input {
+        background-color: $primary-foreground;
+        height: 40px;
+        border-radius: 5px;
+        padding: 5px;
+        box-sizing: border-box;
+        max-width: 100%;
+    }
+}
+
+@mixin header-select {
+
+    /deep/ .mat-form-field-outline {
+        display: none;
     }
 
     /deep/ .mat-form-field-empty mat-label {
-        color: #000;
+        color: black;
         background-color: transparent;
+        line-height: 40px;
+        padding-left: 15px;        
     }
 
     /deep/ .mat-select-arrow {
         color: transparent;
     }
+    
+    /deep/ .mat-select-trigger {
+        margin-top: 5px;
+        line-height: 40px;
+        text-indent: 20px; 
+    }
 
     .header-select {
-        background: url('../../../assets/images/baseline-expand_more-24px.svg') no-repeat transparent center right/10%;
+        height: 40px;
+        border-radius: 5px;
+        background: url('../../../assets/images/baseline-expand_more-24px.svg') no-repeat $primary-foreground center right/10%;
+    }
+
+    /deep/ .mat-form-field-label {
+        color: $primary-foreground;
+
+        mat-label {
+            margin-top: 5px;
+        }
     }
 }

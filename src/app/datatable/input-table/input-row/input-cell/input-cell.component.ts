@@ -13,7 +13,7 @@ export class InputCellComponent implements OnInit {
   constructor(private datatableService: DatatableService) { }
 
   ngOnInit() {
-    console.log(this.inputRow);
+    // console.log(this.inputRow);
   }
 
 }

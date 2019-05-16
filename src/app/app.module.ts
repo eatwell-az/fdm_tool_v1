@@ -29,6 +29,8 @@ import { InputCellComponent } from './datatable/input-table/input-row/input-cell
 import { OutputRowComponent } from './datatable/output-table/output-row/output-row.component';
 import { OutputCellComponent } from './datatable/output-table/output-row/output-cell/output-cell.component';
 import { DatatableService } from './services/datatable.service';
+import { DataManagementService } from './services/data-management.service';
+import { ToolCellComponent } from './datatable/tool-cell/tool-cell.component';
 
 
 @NgModule({
@@ -48,7 +50,8 @@ import { DatatableService } from './services/datatable.service';
     InputRowComponent,
     InputCellComponent,
     OutputRowComponent,
-    OutputCellComponent
+    OutputCellComponent,
+    ToolCellComponent
   ],
   imports: [
     BrowserModule,
@@ -60,7 +63,7 @@ import { DatatableService } from './services/datatable.service';
     ReactiveFormsModule,
     !environment.production ? StoreDevtoolsModule.instrument({ maxAge: 50 }) : []
   ],
-  providers: [DatatableService],
+  providers: [DatatableService, DataManagementService],
   bootstrap: [AppComponent]
 })
 export class AppModule {
