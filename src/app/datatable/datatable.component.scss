@@ -19,7 +19,11 @@
             display: flex;
             flex-direction: row;
             justify-content: flex-end;
-
+            &.toolbox-open > button {
+                transition: background-color, 0.5s ease;
+                background-color: #e5e5e5;
+                color: $accent;
+            }
             .dtable-header-tools {
                 color: $primary;
                 background-color: $primary-foreground;
@@ -29,31 +33,35 @@
                 margin-right: 2px;
                 z-index: 999;
             }
-            &.toolbox-open {
-                transition: background-color, 0.5s ease;
-                background-color: #777;
-                color: $primary-foreground;
-            }
         }
     }
 
     .input-row, .output-row {
         // border: 1px solid;
-        display: grid;
+        
 
         .input-cell, .output-cell {
+            display: grid;
             width: 100%;
             height: 50px;
             box-sizing: border-box;
             transition: background-color 0.5s ease;
             background-color: $primary-foreground;
 
+            button.toolbox-button {
+                width: 30px;
+            }
 
             .toolbox-open {
                 border: 0 none transparent;
-                color: #ccc;
+                color: $accent-mid;
                 transition: background-color 0.5s ease;
-                background-color: #777;
+                background-color: rgba(0, 0, 0, .1);
+
+                &button {
+                    display: inline-block;
+                    background: $accent;
+                }
             }
         }
 

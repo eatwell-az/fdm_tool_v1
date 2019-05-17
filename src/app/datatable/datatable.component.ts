@@ -1,35 +1,41 @@
-import { Component, OnInit, ViewChild, ElementRef, Renderer2, ViewChildren } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Renderer2, ViewChildren, Inject } from '@angular/core';
 import { DatatableService } from '../services/datatable.service';
 import { DataSet, Field } from '../shared/model/cell.data';
-import { FormGroup, FormControl, AbstractControl } from '@angular/forms';
+import { FormGroup, FormControl } from '@angular/forms';
 import { DataManagementService } from '../services/data-management.service';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { FunctionDialogComponent } from '../function-dialog/function-dialog.component';
 
 @Component({
   selector: 'app-datatable',
   templateUrl: './datatable.component.html',
-  styleUrls: ['./datatable.component.scss']
+  styleUrls: ['./datatable.component.scss'],
+  providers: [ MatDialog ]
 })
 export class DatatableComponent implements OnInit {
+
+  animal: string;
+  name: string;
+
   inputTable: DataSet[];
   inputRows: Field[];
+  inputColumns: any = [];
+  cssGridInputColumnsValue: string;
   outputRows: any;
   outputTable: DataSet[];
   datatableForm: FormGroup;
-  inputColumn: any;
   showFiller = false;
   drawerIsOpen = false;
 
+  cleanseTooltip = 'Apply a cleansing operation';
+  functionTooltip = 'Apply a function calculating operation';
   constructor(
     private datatableService: DatatableService,
     private dataManagementService: DataManagementService,
-    private renderer: Renderer2
-    ) { }
+    private renderer: Renderer2,
+    public dialog: MatDialog) { }
 
   ngOnInit() {
-
-/*     this.renderer.setStyle(this.elRef.nativeElement, 'display', 'grid');
-    this.renderer.setStyle(this.elRef.nativeElement, 'grid-template-columns', '100%'); */
-    // this.inputColumn = {'grid-template-columns': '1fr 30px'};
     this.inputTable = this.datatableService.dataSets.filter(inputTable => inputTable.type === 'FILE');
     this.outputTable = this.datatableService.dataSets.filter(outputTable => outputTable.type === 'TABLE');
 
@@ -40,11 +46,36 @@ export class DatatableComponent implements OnInit {
     }
 
     this.getDatatableForm(this.inputTable);
+    this.insertColumn(2);
   }
-  openStarted() {
-    this.drawerIsOpen = !this.drawerIsOpen;
-    console.log(this.drawerIsOpen);
+
+  insertColumn(qty: number) {
+    const cssColumnValue = 'auto';
+    const cols: string[] = [];
+    for (let i = 0; i < qty; i++) {
+      cols.push(cssColumnValue);
+    }
+    this.inputColumns = cols;
+    this.cssGridInputColumnsValue = cols.join(' ');
+    console.log(this.cssGridInputColumnsValue);
+    console.log(this.inputColumns);
   }
+
+  openDialog(): void {
+    const dialogRef = this.dialog.open(FunctionDialogComponent, {
+      width: '250px',
+      data: {name: this.name, animal: this.animal}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed: ', result);
+    });
+  }
+
+  drawerChanged(isOpen: boolean) {
+    this.drawerIsOpen = isOpen;
+  }
+
   getDatatableForm(inputTable: DataSet[]) {
     if (inputTable.length > 0) {
       this.inputRows = inputTable[0].fields;
@@ -60,8 +91,4 @@ export class DatatableComponent implements OnInit {
       });
     }
   }
-
-
-
-
 }

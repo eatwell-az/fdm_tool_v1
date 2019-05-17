@@ -31,6 +31,7 @@ import { OutputCellComponent } from './datatable/output-table/output-row/output-
 import { DatatableService } from './services/datatable.service';
 import { DataManagementService } from './services/data-management.service';
 import { ToolCellComponent } from './datatable/tool-cell/tool-cell.component';
+import { FunctionDialogComponent } from './function-dialog/function-dialog.component';
 
 
 @NgModule({
@@ -51,8 +52,10 @@ import { ToolCellComponent } from './datatable/tool-cell/tool-cell.component';
     InputCellComponent,
     OutputRowComponent,
     OutputCellComponent,
-    ToolCellComponent
+    ToolCellComponent,
+    FunctionDialogComponent
   ],
+  entryComponents: [FunctionDialogComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

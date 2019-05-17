@@ -2,28 +2,67 @@
   <div class="dtable-content">
     <mat-drawer-container class="toolbox-container" autosize>
       <div class="input-grid">
-        <div class="dtable-header dtable-header-input">
+        <div class="dtable-header dtable-header-input" [ngClass]="{'toolbox-open': drawerIsOpen}">
           <button *ngIf="!drawerIsOpen" mat-button type="button" (click)="drawer.toggle()" class="dtable-header-tools">
-              <mat-icon>build</mat-icon>
+            <mat-icon>build</mat-icon>
           </button>
-          <button *ngIf="drawerIsOpen" mat-button type="button" (click)="drawer.toggle()" class="dtable-header-tools toolbox-open">
-              <mat-icon>close</mat-icon>
+          <button *ngIf="drawerIsOpen" mat-button type="button" (click)="drawer.toggle()" class="dtable-header-tools">
+            <mat-icon>close</mat-icon>
           </button>
         </div>
-        <div *ngFor="let inputRow of inputRows" class="input-row" [ngStyle]="inputColumn">
-          <div class="input-cell">
-            <input class="input-cell name" type="text" formControlName="{{ inputRow.name }}" value="{{ inputRow.name }}" [ngClass]="{'toolbox-open': drawerIsOpen}" readonly>
-          </div>
+        <div *ngFor="let inputRow of inputRows" class="input-row">
+          <div class="input-cell" *ngFor="let inputColumn of inputColumns" [ngStyle]="{'grid-template-column': cssGridInputColumnsValue}">
+            <input class="input-cell name" type="text" [formControlName]="inputRow.name" value="{{ inputRow.name }}" [ngClass]="{'toolbox-open': drawerIsOpen}" readonly>
+          </div>       
         </div>
       </div> 
-      <mat-drawer #drawer class="toolbox-sidenav" mode="side" position="end" (openedChange)="openStarted()">
+      <mat-drawer
+        #drawer
+        class="toolbox-sidenav"
+        mode="side"
+        position="end"
+        (openedStart)="drawerChanged(true)"
+        (closedStart)="drawerChanged(false)">
         <div class="dtable-header toolbox-controls">
-          <button mat-flat-button type="button" class="toolbox-control">
-            <mat-icon>functions</mat-icon>
-          </button> 
-          <button mat-flat-button type="button" class="toolbox-control">
-            <mat-icon>crop</mat-icon>
-          </button>           
+          <!-- <mat-menu #menuTest="matMenu" xPosition="after" [ngClass]="{'cleanse-options': !toolboxSelectPhase}">
+            <button mat-menu-item type="button" [matMenuTriggerFor]="anotherTest">
+              <mat-icon>function</mat-icon>
+            </button>
+            <button mat-menu-item type="button" [matMenuTriggerFor]="differentTest">
+              <mat-icon></mat-icon>
+            </button>
+            <mat-menu #anotherTest="matMenu">
+              <button mat-flat-button>
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-menu>
+            <mat-menu #differentTest="matMenu">
+              <button mat-flat-button>crop</button>
+            </mat-menu>
+          </mat-menu> -->
+          <!-- add [matMenuTriggerFor]="menuTest" to any element to trigger   -->
+          <!-- <button mat-button class="toolbox-button" [ngClass]="{'toolbox-open': drawerIsOpen, 'toolbox-hover': (drawerIsOpen && toolboxSelectPhase)}">x</button> -->
+            <button
+              mat-flat-button
+              class="toolbox-control"
+              (click)="openDialog()"
+              #tooltip="matTooltip"
+              [matTooltip]="functionTooltip"
+              matTooltipPosition="left"
+              [matTooltipClass]="{'toolbox-tooltip cleanse-tooltip': true}">
+              <mat-icon>functions</mat-icon>
+            </button> 
+            <button
+              mat-flat-button 
+              class="toolbox-control"
+              (click)="insertColumn(1)"
+              #tooltip="matTooltip"
+              [matTooltip]="cleanseTooltip"
+              matTooltipPosition="left"
+              [matTooltipClass]="{'toolbox-tooltip cleanse-tooltip': true}">
+              <mat-icon>crop</mat-icon>
+            </button>
+          
         </div>
       </mat-drawer>
     </mat-drawer-container>
