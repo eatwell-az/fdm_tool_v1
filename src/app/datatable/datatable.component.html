@@ -10,8 +10,8 @@
             <mat-icon>close</mat-icon>
           </button>
         </div>
-        <div *ngFor="let inputRow of inputRows" class="input-row">
-          <div class="input-cell" *ngFor="let inputColumn of inputColumns" [ngStyle]="{'grid-template-column': cssGridInputColumnsValue}">
+        <div *ngFor="let inputRow of inputRows" class="input-row" [ngStyle]="cssInputColumnsValue">
+          <div class="input-cell" *ngFor="let inputColumn of inputColumns">
             <input class="input-cell name" type="text" [formControlName]="inputRow.name" value="{{ inputRow.name }}" [ngClass]="{'toolbox-open': drawerIsOpen}" readonly>
           </div>       
         </div>
@@ -55,7 +55,7 @@
             <button
               mat-flat-button 
               class="toolbox-control"
-              (click)="insertColumn(1)"
+              (click)="setColumns(inputColumns.length + 1)"
               #tooltip="matTooltip"
               [matTooltip]="cleanseTooltip"
               matTooltipPosition="left"

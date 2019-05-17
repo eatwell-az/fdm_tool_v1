@@ -5,6 +5,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { DataManagementService } from '../services/data-management.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FunctionDialogComponent } from '../function-dialog/function-dialog.component';
+import { forEach } from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'app-datatable',
@@ -14,13 +15,10 @@ import { FunctionDialogComponent } from '../function-dialog/function-dialog.comp
 })
 export class DatatableComponent implements OnInit {
 
-  animal: string;
-  name: string;
-
   inputTable: DataSet[];
   inputRows: Field[];
   inputColumns: any = [];
-  cssGridInputColumnsValue: string;
+  cssInputColumnsValue = { gridTemplateColumns: 'auto' };
   outputRows: any;
   outputTable: DataSet[];
   datatableForm: FormGroup;
@@ -29,6 +27,7 @@ export class DatatableComponent implements OnInit {
 
   cleanseTooltip = 'Apply a cleansing operation';
   functionTooltip = 'Apply a function calculating operation';
+
   constructor(
     private datatableService: DatatableService,
     private dataManagementService: DataManagementService,
@@ -46,25 +45,62 @@ export class DatatableComponent implements OnInit {
     }
 
     this.getDatatableForm(this.inputTable);
-    this.insertColumn(2);
+    this.setColumns(1);
   }
 
-  insertColumn(qty: number) {
-    const cssColumnValue = 'auto';
-    const cols: string[] = [];
-    for (let i = 0; i < qty; i++) {
-      cols.push(cssColumnValue);
+
+  gridTemplateColumnCss(columnsInPercent, columnQuantity) {
+
+    checkPercentTotal();
+
+    function checkPercentTotal() {
+      if (((100 / columnQuantity) % 2) > 1) {
+        const lastColumnPercent = columnsInPercent[columnsInPercent.length - 1];
+        const paddingLastColumnToTotal100 = lastColumnPercent + 1;
+        columnsInPercent.splice((columnsInPercent.length - 1), 1, paddingLastColumnToTotal100);
+      }
     }
-    this.inputColumns = cols;
-    this.cssGridInputColumnsValue = cols.join(' ');
-    console.log(this.cssGridInputColumnsValue);
-    console.log(this.inputColumns);
+
+    if (columnQuantity > 1) {
+      let newRowWidth = 0;
+      let previousColumns = '';
+      for (let i = 0; i < (columnsInPercent.length - 1); i++) {
+        previousColumns += 'auto ';
+      }
+      const animateColumnInsertion = setInterval(() => {
+        if(newRowWidth < 1) {
+          this.inputColumns = columnsInPercent;
+        }
+        newRowWidth += 1;
+        if (newRowWidth === columnsInPercent[columnsInPercent.length - 1]) {
+          clearInterval(animateColumnInsertion);
+        }
+        const gridValues = previousColumns + newRowWidth + '%';
+        console.log(gridValues);
+        this.cssInputColumnsValue = { gridTemplateColumns: gridValues };
+      }, 5);
+    }
+  }
+
+  setColumns(qty: number) {
+    const colPercentWidths = Math.round(100 / qty);
+    const arr = [];
+    if (qty > 1) {
+      for (let i = 0; i < qty; i++) {
+        arr.push(colPercentWidths);
+      }
+    } else {
+      arr.push('auto');
+      this.inputColumns = arr;
+    }
+
+    this.gridTemplateColumnCss(arr, qty);
   }
 
   openDialog(): void {
     const dialogRef = this.dialog.open(FunctionDialogComponent, {
       width: '250px',
-      data: {name: this.name, animal: this.animal}
+      data: {}
     });
 
     dialogRef.afterClosed().subscribe(result => {
