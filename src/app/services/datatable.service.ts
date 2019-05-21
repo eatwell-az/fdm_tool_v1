@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as json from '../../data/SampleData.json';
 import * as _ from 'lodash';
-import { BusinessProcess, System, DataSet, Field } from '../shared/model/cell.data';
+import { BusinessProcess, System, DataSet, Field, CellData } from '../shared/model/cell.data';
 
 @Injectable({
   providedIn: 'root'
@@ -78,7 +78,19 @@ export class DatatableService {
     if (fieldCount.length > 0) {
       for (let i = 0; i < fieldCount.length; i++) {
         const {id, name, dataType, length, businessProcesses } = fieldSet[fieldCount[i]];
-        const field: Field = {id, name, dataType, length, businessProcesses};
+
+        const cellData: CellData = {
+          cssGridValue: 'auto',
+          cleansingApplied: [],
+          metaData: {
+            isOriginal: true,
+            isParent: true,
+            nextSibling: null,
+            prevSibling: null
+          }
+        };
+
+        const field: Field = {id, name, dataType, length, businessProcesses, cellData};
         fields.push(field);
       }
     }

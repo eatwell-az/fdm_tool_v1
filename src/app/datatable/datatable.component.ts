@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild, ElementRef, Renderer2, ViewChildren, Inject } from '@angular/core';
 import { DatatableService } from '../services/datatable.service';
-import { DataSet, Field } from '../shared/model/cell.data';
+import { DataSet, InputCell, Field } from '../shared/model/cell.data';
 import { FormGroup, FormControl } from '@angular/forms';
 import { DataManagementService } from '../services/data-management.service';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTooltip } from '@angular/material';
 import { FunctionDialogComponent } from '../function-dialog/function-dialog.component';
-import { forEach } from '@angular/router/src/utils/collection';
+import { Pipe } from '@angular/compiler/src/core';
 
 @Component({
   selector: 'app-datatable',
@@ -15,18 +15,35 @@ import { forEach } from '@angular/router/src/utils/collection';
 })
 export class DatatableComponent implements OnInit {
 
+  @ViewChild('selecttooltip') selectTooltip: MatTooltip;
+  selectTooltipDisabled = true;
+  selectCellPrompt: boolean;
   inputTable: DataSet[];
   inputRows: Field[];
-  inputColumns: any = [];
-  cssInputColumnsValue = { gridTemplateColumns: 'auto' };
-  outputRows: any;
+  inputColumns: string[];
+  cssInputColumnsValue: { gridTemplateColumns: string };
+  outputRows: Field[];
   outputTable: DataSet[];
   datatableForm: FormGroup;
-  showFiller = false;
+  // showFiller = false;
   drawerIsOpen = false;
+  cleansePermitted: string;
 
-  cleanseTooltip = 'Apply a cleansing operation';
-  functionTooltip = 'Apply a function calculating operation';
+  tooltipObj = {
+    cleanseTooltip: {
+      general: 'Cleanse...',
+      trim: 'Trim',
+      case: 'Lower Case',
+      round: 'Round',
+      select: `Cell chooser...`
+   },
+    functionTooltip: {
+      general: 'Function...'
+    },
+    decisionTable: {
+      general: 'Decision Table...'
+    }
+  };
 
   constructor(
     private datatableService: DatatableService,
@@ -45,9 +62,9 @@ export class DatatableComponent implements OnInit {
     }
 
     this.getDatatableForm(this.inputTable);
-    this.setColumns(1);
+    this.setColumns(2);
+    this.selectCellPrompt = false;
   }
-
 
   gridTemplateColumnCss(columnsInPercent, columnQuantity) {
 
@@ -80,6 +97,10 @@ export class DatatableComponent implements OnInit {
         this.cssInputColumnsValue = { gridTemplateColumns: gridValues };
       }, 5);
     }
+  }
+
+  applyCleanse(cleanseType: string, inputRow: Field) {
+    console.log(cleanseType, inputRow);
   }
 
   setColumns(qty: number) {

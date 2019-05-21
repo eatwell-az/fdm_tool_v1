@@ -1,7 +1,5 @@
 @import '../../styles/variables';
 
-
-
 .dtable-content {
 /*  margin-left: 10px; */
     border: 1px solid;
@@ -29,36 +27,63 @@
                 background-color: $primary-foreground;
                 border-bottom-left-radius: 0px;
                 border-bottom-right-radius: 0px;
-                margin-top: 15px;
+                margin-top: 8px;
                 margin-right: 2px;
                 z-index: 999;
             }
         }
     }
 
-    
-
     .input-row, .output-row {
         // border: 1px solid;
         display: grid;
-        transition: width 0.5s ease;
+        &.no-top-row-border {
+            border-top-color: $primary-foreground;
+        }
+        .input-cell-container {
+            background-color: $primary-foreground;
+
+            .input-cell-cleanse {
+                background-color: $primary-foreground;
+                color: $accent-light;
+                max-width: 65px;
+                height: 65px;
+            }
+        }
+        .input-cell {
+            box-shadow: 0px 0px 5px 0px rgba(0,0,0,.3);
+            z-index: 999;
+        }
+        .output-cell {
+            width: 100%;
+        }
 
         .input-cell, .output-cell {
-            
-            width: 100%;
+            border: 0 none;
+            border-bottom: 2px solid $accent-light;
+            border-right: 1px solid $accent-light;
             height: 50px;
             box-sizing: border-box;
-            transition: background-color 0.5s ease;
+            transition-property: background-color, border-color;
+            transition-duration: 0.5s;
+            transition-timing-function: ease;
             background-color: $primary-foreground;
+
+            
+
+            &.ancestor-cell {
+                background-color: $accent-light;
+            }
 
             button.toolbox-button {
                 width: 30px;
             }
 
-            .toolbox-open {
+            .toolbox-open, &.ancestor-cell{
+                
                 border: 0 none transparent;
                 color: $accent-mid;
-                transition: background-color 0.5s ease;
+                // transition: background-color 0.5s ease;
                 background-color: rgba(0, 0, 0, .1);
 
                 &button {
@@ -66,8 +91,12 @@
                     background: $accent;
                 }
             }
-        }
 
+            &.toolbox-hover {
+                cursor: pointer;
+            }
+        }
+        
         & input {
             text-indent: 15px;
         }
@@ -96,6 +125,8 @@
         }
     }
 
+    
+
     .toolbox-controls {
         display: flex;
         flex-direction: column;
@@ -112,6 +143,8 @@
     }
     .output-grid {
         box-shadow: -5px 0px 5px 0px rgba(0,0,0,.3);
+        z-index: 99;
     }
+
 }
 

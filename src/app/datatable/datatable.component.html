@@ -1,7 +1,12 @@
 <form [formGroup]="datatableForm">
   <div class="dtable-content">
     <mat-drawer-container class="toolbox-container" autosize>
-      <div class="input-grid">
+      <div class="input-grid"
+        #selecttooltip="matTooltip"
+        [matTooltip]="tooltipObj.cleanseTooltip.select"
+        [matTooltipDisabled]="selectTooltipDisabled"
+        matTooltipPosition="left"
+        matTooltipClass="toolbox-tooltip cleanse-tooltip select-cell">
         <div class="dtable-header dtable-header-input" [ngClass]="{'toolbox-open': drawerIsOpen}">
           <button *ngIf="!drawerIsOpen" mat-button type="button" (click)="drawer.toggle()" class="dtable-header-tools">
             <mat-icon>build</mat-icon>
@@ -10,10 +15,47 @@
             <mat-icon>close</mat-icon>
           </button>
         </div>
-        <div *ngFor="let inputRow of inputRows" class="input-row" [ngStyle]="cssInputColumnsValue">
-          <div class="input-cell" *ngFor="let inputColumn of inputColumns">
-            <input class="input-cell name" type="text" [formControlName]="inputRow.name" value="{{ inputRow.name }}" [ngClass]="{'toolbox-open': drawerIsOpen}" readonly>
-          </div>       
+        <div *ngFor="let inputRow of inputRows; index as j" class="input-row" [ngStyle]="cssInputColumnsValue" [ngClass]="{ 'no-top-row-border': j === 0}">
+          <div class="input-cell-container">
+            <input *ngFor="let inputCell of inputColumns; index as i"
+              #inputcell
+              class="input-cell"
+              type="text"
+              [formControlName]="inputRow.name"
+              value="{{ inputRow.name }}"
+              [ngClass]="{'toolbox-open': drawerIsOpen, 'ancestor-cell': i < inputColumns.length - 1, 'seed-originator': i === 0, '': true }" readonly>
+          </div>
+          <button
+            *ngIf="inputRow.dataType === 'CHARACTER'"
+            class="input-cell-cleanse"
+            mat-button
+            #tooltip="matTooltip"
+            [matTooltip]="tooltipObj.cleanseTooltip.trim"
+            matTooltipPosition="left"
+            [matTooltipClass]="{'toolbox-tooltip cleanse-tooltip': true}">
+            <mat-icon>crop</mat-icon>
+          </button>
+          <button
+            *ngIf="inputRow.dataType === 'CHARACTER'"
+            class="input-cell-cleanse"
+            mat-button
+            #tooltip="matTooltip"
+            [matTooltip]="tooltipObj.cleanseTooltip.case"
+            matTooltipPosition="left"
+            [matTooltipClass]="{'toolbox-tooltip cleanse-tooltip': true}">
+            <mat-icon>text_format</mat-icon>
+          </button>
+          <button
+            *ngIf="inputRow.dataType === 'NUMERIC'"
+            class="input-cell-cleanse"
+            mat-button
+            #tooltip="matTooltip"
+            [matTooltip]="tooltipObj.cleanseTooltip.round"
+            matTooltipPosition="left"
+            [matTooltipClass]="{'toolbox-tooltip cleanse-tooltip': true}"
+            (click)="applyCleanse('ROUND_UP', inputRow)">
+            <mat-icon>all_out</mat-icon>
+          </button>
         </div>
       </div> 
       <mat-drawer
@@ -24,22 +66,7 @@
         (openedStart)="drawerChanged(true)"
         (closedStart)="drawerChanged(false)">
         <div class="dtable-header toolbox-controls">
-          <!-- <mat-menu #menuTest="matMenu" xPosition="after" [ngClass]="{'cleanse-options': !toolboxSelectPhase}">
-            <button mat-menu-item type="button" [matMenuTriggerFor]="anotherTest">
-              <mat-icon>function</mat-icon>
-            </button>
-            <button mat-menu-item type="button" [matMenuTriggerFor]="differentTest">
-              <mat-icon></mat-icon>
-            </button>
-            <mat-menu #anotherTest="matMenu">
-              <button mat-flat-button>
-                <mat-icon>close</mat-icon>
-              </button>
-            </mat-menu>
-            <mat-menu #differentTest="matMenu">
-              <button mat-flat-button>crop</button>
-            </mat-menu>
-          </mat-menu> -->
+         
           <!-- add [matMenuTriggerFor]="menuTest" to any element to trigger   -->
           <!-- <button mat-button class="toolbox-button" [ngClass]="{'toolbox-open': drawerIsOpen, 'toolbox-hover': (drawerIsOpen && toolboxSelectPhase)}">x</button> -->
             <button
@@ -47,20 +74,20 @@
               class="toolbox-control"
               (click)="openDialog()"
               #tooltip="matTooltip"
-              [matTooltip]="functionTooltip"
+              [matTooltip]="tooltipObj.functionTooltip.general"
               matTooltipPosition="left"
               [matTooltipClass]="{'toolbox-tooltip cleanse-tooltip': true}">
               <mat-icon>functions</mat-icon>
             </button> 
+            <!-- (click)="setColumns(inputColumns.length + 1)" -->
             <button
               mat-flat-button 
               class="toolbox-control"
-              (click)="setColumns(inputColumns.length + 1)"
               #tooltip="matTooltip"
-              [matTooltip]="cleanseTooltip"
+              [matTooltip]="tooltipObj.decisionTable.general"
               matTooltipPosition="left"
               [matTooltipClass]="{'toolbox-tooltip cleanse-tooltip': true}">
-              <mat-icon>crop</mat-icon>
+              <mat-icon>call_split</mat-icon>
             </button>
           
         </div>

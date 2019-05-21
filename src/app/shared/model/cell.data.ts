@@ -1,7 +1,13 @@
 
 export interface CellData {
-    cellId: CellId;
-    cellType: string;
+    cleansingApplied: string[];
+    cssGridValue: string;
+    metaData: {
+        isParent: boolean;
+        isOriginal: boolean;
+        nextSibling: any;
+        prevSibling: any;
+    };
 }
 
 export interface Base {
@@ -33,6 +39,7 @@ export interface Field extends Base {
     dataType: string;
     length: number;
     businessProcesses: Array<BusinessProcess>;
+    cellData: CellData;
 }
 
 export interface InputRow {
@@ -45,8 +52,8 @@ export interface InputCell extends Field {
     name: string;
     dataType: string;
     length: number;
-    businessProcess: Array<BusinessProcess>;
-    inCurrentColumn: boolean;
+    businessProcesses: Array<BusinessProcess>;
+    columns: string[];
 }
 /* export class InputCell implements CellData {
 
@@ -83,10 +90,6 @@ export interface CellId {
     colId: number;
     areaId: number;
 }
-
-
-
-
 
 
 /*
