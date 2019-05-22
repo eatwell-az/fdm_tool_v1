@@ -1,39 +1,71 @@
-<form [formGroup]="datatableForm">
+<form>
   <div class="dtable-content">
     <mat-drawer-container class="toolbox-container" autosize>
-      <div class="input-grid"
-        #selecttooltip="matTooltip"
-        [matTooltip]="tooltipObj.cleanseTooltip.select"
-        [matTooltipDisabled]="selectTooltipDisabled"
-        matTooltipPosition="left"
-        matTooltipClass="toolbox-tooltip cleanse-tooltip select-cell">
-        <div class="dtable-header dtable-header-input" [ngClass]="{'toolbox-open': drawerIsOpen}">
-          <button *ngIf="!drawerIsOpen" mat-button type="button" (click)="drawer.toggle()" class="dtable-header-tools">
-            <mat-icon>build</mat-icon>
-          </button>
-          <button *ngIf="drawerIsOpen" mat-button type="button" (click)="drawer.toggle()" class="dtable-header-tools">
-            <mat-icon>close</mat-icon>
-          </button>
-        </div>
-        <div *ngFor="let inputRow of inputRows; index as j" class="input-row" [ngStyle]="cssInputColumnsValue" [ngClass]="{ 'no-top-row-border': j === 0}">
-          <div class="input-cell-container">
-            <input *ngFor="let inputCell of inputColumns; index as i"
-              #inputcell
-              class="input-cell"
-              type="text"
-              [formControlName]="inputRow.name"
-              value="{{ inputRow.name }}"
-              [ngClass]="{'toolbox-open': drawerIsOpen, 'ancestor-cell': i < inputColumns.length - 1, 'seed-originator': i === 0, '': true }" readonly>
+      <div class="input-gridb">
+        <!--<div class="header-row">-->
+          <div class="header-row" [ngClass]="{'toolbox-open': drawerIsOpen}"> 
+              filler
           </div>
-          <button
-            *ngIf="inputRow.dataType === 'CHARACTER'"
-            class="input-cell-cleanse"
+        <div class="tools-header">
+            <button mat-button type="button" (click)="drawer.toggle()" class="">
+              <mat-icon *ngIf="drawerIsOpen">close</mat-icon>
+              <mat-icon *ngIf="!drawerIsOpen">build</mat-icon>
+            </button>
+        </div>
+        <div class="input-rows ngrepeat-------1a">
+          <div class="input-cell ngrepeat---------1b" style="grid-column: 1 / 2;">ACCOUNT_NUMBER</div>
+          <div class="input-cell ngrepeat---------1b" style="grid-column: 2 / span 3;">account_number</div>
+        </div>
+        <div class="tools-column ngrepeat-------2a">
+          <button mat-button >r1.c2</button>
+        </div>
+        <div class="input-rows ngrepeat-------1a">
+          <div class="input-cell ngrepeat---------1b" style="grid-column: 1 / span 4">BALANCE</div>
+        </div>
+        <div class="tools-column ngrepeat-------2a">
+            <button mat-button >r2.c2</button>
+          </div>
+        <div class="input-rows ngrepeat">
+            <div class="input-cell ngrepeat------3" style="grid-column: 1 / span 2">row2 - col1</div>
+            <div class="input-cell ngrepeat------3" style="grid-column: 3 / 4">row2 - col2</div>
+            <div class="input-cell ngrepeat------3">row2 - col3</div>
+        </div>
+        <div class="tools-column ngrepeat-------4">
+            <button mat-button >r3.c2</button>
+          </div>
+        <div class="input-rows ngrepeat">
+            <div class="input-cell ngrepeat------3" style="grid-column: 3 / 4">row2 - col2</div>
+            <div class="input-cell ngrepeat------3">row2 - col3</div>
+        </div>
+        <div class="tools-column ngrepeat-------4">
+            <button mat-button >r4.c2</button>
+          </div>
+      </div>
+    <!--
+      <div class="input-grid" style="grid-template-columns: auto 65px; grid-template-rows: auto auto;">
+          <div *ngFor="let inputRow of inputRows.rows; index as j" class="input-row" [ngClass]="{ 'no-top-row-border': j === 0}">
+    -->
+            <!-- grid calc's change on new steps -->
+            <!-- 
+              <div *ngFor="let step of inputRow.steps; index as i"
+                #inputcell
+                class="input-cell"
+                [ngClass]="{'toolbox-open': drawerIsOpen, 'ancestor-cell': i < inputRow.steps.length - 1 }">
+                {{ step.postStep }}
+              </div>
+            -->
+          <!-- <button
+            *ngFor="let cleanse of inputRow.cleanseOperations;"
             mat-button
+            class="input-cell-cleanse"
             #tooltip="matTooltip"
-            [matTooltip]="tooltipObj.cleanseTooltip.trim"
+            [matTooltip]="cleanse.id"
             matTooltipPosition="left"
+            [disabled]="cleanse.isApplied"
             [matTooltipClass]="{'toolbox-tooltip cleanse-tooltip': true}">
-            <mat-icon>crop</mat-icon>
+            <mat-icon>
+              {{cleanse.icon}}
+            </mat-icon>
           </button>
           <button
             *ngIf="inputRow.dataType === 'CHARACTER'"
@@ -55,9 +87,20 @@
             [matTooltipClass]="{'toolbox-tooltip cleanse-tooltip': true}"
             (click)="applyCleanse('ROUND_UP', inputRow)">
             <mat-icon>all_out</mat-icon>
+          </button> -->
+        <!--
+           </div>
+        -->
+        <!--
+          <div class="dtable-header dtable-header-input" [ngClass]="{'toolbox-open': drawerIsOpen}" style="align-self: end;">
+          <button mat-button type="button" (click)="drawer.toggle()" class="dtable-header-tools">
+            <mat-icon *ngIf="drawerIsOpen">close</mat-icon>
+            <mat-icon *ngIf="!drawerIsOpen">build</mat-icon>
           </button>
         </div>
+       
       </div> 
+      -->
       <mat-drawer
         #drawer
         class="toolbox-sidenav"

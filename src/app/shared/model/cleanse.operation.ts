@@ -1,19 +1,12 @@
+import { Base } from './cell.data';
+import { Pipe } from '@angular/compiler/src/core';
 
-export class CleanseOperation {
-    type: string;
-    applied: boolean;
+export interface CleanseOperation extends Base {
+    id: number;
+    dataType: string;
+    name: string;
     icon: string;
-    anyOrder: boolean;
-    effect: any;
-    constructor(type: string) {
-        this.applied = false;
-        this.icon = '';
-        this.anyOrder = true;
-        this.effect = ['pipe1', 'pipe2'];
-        // array of available pipes compat w/ type
-        // DecimalPipe
-        // PercentPipe
-        // CurrencyPipe
-        // KeyValuePipe
-    }
+    operation: Pipe;
+    isApplied: boolean;
 }
+

@@ -14,9 +14,7 @@
         height: 40px;
 
         &.dtable-header-input {
-            display: flex;
-            flex-direction: row;
-            justify-content: flex-end;
+
             &.toolbox-open > button {
                 transition: background-color, 0.5s ease;
                 background-color: #e5e5e5;
@@ -35,7 +33,6 @@
     }
 
     .input-row, .output-row {
-        // border: 1px solid;
         display: grid;
         &.no-top-row-border {
             border-top-color: $primary-foreground;
@@ -103,7 +100,7 @@
     }
 
     .input-row {
-        grid-template-rows: auto;
+        // grid-template-rows: auto;
         // grid-template-columns: auto auto;
     }
 
@@ -144,6 +141,47 @@
     .output-grid {
         box-shadow: -5px 0px 5px 0px rgba(0,0,0,.3);
         z-index: 99;
+    }
+    .input-grid {
+        display: grid;
+    }
+
+    .input-gridb {
+        border: 2px solid #ff0;
+        display: grid;
+        grid-template-columns: auto 65px;
+        grid-template-rows: 65px auto-fill;
+        box-sizing: border-box;
+       
+        .input-rows, .header-row {
+            border: 2px solid #00f;
+            width: auto;
+        }
+        .header-row {
+            height: 65px;
+            background-color: $accent;
+        }
+        .input-rows {
+            background-color: orangered;
+            color: white;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: 65px;
+            .input-cell {
+                padding: 5px;
+                background-color: yellow;
+                border: 2px solid black;
+                color: black;
+                height: 65px;
+                box-sizing: border-box;
+            }
+        }
+        .tools-column, .tools-header {
+            border: 2px solid #000;
+            max-width: 65px;
+            height: 65px;
+        }
+        
     }
 
 }

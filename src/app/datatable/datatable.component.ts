@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild, ElementRef, Renderer2, ViewChildren, Inject } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { DatatableService } from '../services/datatable.service';
-import { DataSet, InputCell, Field } from '../shared/model/cell.data';
+import { DataSet, Field, InputRow } from '../shared/model/cell.data';
 import { FormGroup, FormControl } from '@angular/forms';
 import { DataManagementService } from '../services/data-management.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTooltip } from '@angular/material';
 import { FunctionDialogComponent } from '../function-dialog/function-dialog.component';
-import { Pipe } from '@angular/compiler/src/core';
+import { CleanseOperation } from '../shared/model/cleanse.operation';
 
 @Component({
   selector: 'app-datatable',
@@ -15,11 +15,8 @@ import { Pipe } from '@angular/compiler/src/core';
 })
 export class DatatableComponent implements OnInit {
 
-  @ViewChild('selecttooltip') selectTooltip: MatTooltip;
-  selectTooltipDisabled = true;
-  selectCellPrompt: boolean;
   inputTable: DataSet[];
-  inputRows: Field[];
+  inputRows: any;
   inputColumns: string[];
   cssInputColumnsValue: { gridTemplateColumns: string };
   outputRows: Field[];
@@ -28,6 +25,7 @@ export class DatatableComponent implements OnInit {
   // showFiller = false;
   drawerIsOpen = false;
   cleansePermitted: string;
+  cleanseOperations: any;
 
   tooltipObj = {
     cleanseTooltip: {
@@ -54,19 +52,55 @@ export class DatatableComponent implements OnInit {
   ngOnInit() {
     this.inputTable = this.datatableService.dataSets.filter(inputTable => inputTable.type === 'FILE');
     this.outputTable = this.datatableService.dataSets.filter(outputTable => outputTable.type === 'TABLE');
-
+    // this.inputRows = this.datatableService.inputRows;
+    this.inputRows = this.datatableService.inputRowz;
+    console.log(this.inputRows);
     if (this.outputTable.length > 0) {
       for (const outputRow of this.outputTable) {
         this.outputRows = outputRow.fields;
       }
     }
 
-    this.getDatatableForm(this.inputTable);
-    this.setColumns(2);
-    this.selectCellPrompt = false;
+    this.getDatatableForm(this.inputRows);
+    this.cssInputColumnsValue = {gridTemplateColumns: 'auto'};
+    this.cleanseOperations = this.datatableService.cleanseOperations;
+    console.log(this.cleanseOperations);
   }
 
-  gridTemplateColumnCss(columnsInPercent, columnQuantity) {
+/*   gridTemplateColumnCss(columnsInPercent, columnQuantity) {
+
+    checkPercentTotal();
+
+    function checkPercentTotal() {
+      if (((100 / columnQuantity) % 2) > 1) {
+        const lastColumnPercent = columnsInPercent[columnsInPercent.length - 1];
+        const paddingLastColumnToTotal100 = lastColumnPercent + 1;
+        columnsInPercent.splice((columnsInPercent.length - 1), 1, paddingLastColumnToTotal100);
+      }
+    }
+
+    if (columnQuantity > 1) {
+      let newRowWidth = 0;
+      let previousColumns = '';
+      for (let i = 0; i < (columnsInPercent.length - 1); i++) {
+        previousColumns += 'auto ';
+      }
+      const animateColumnInsertion = setInterval(() => {
+        if(newRowWidth < 1) {
+          this.inputColumns = columnsInPercent;
+        }
+        newRowWidth += 1;
+        if (newRowWidth === columnsInPercent[columnsInPercent.length - 1]) {
+          clearInterval(animateColumnInsertion);
+        }
+        const gridValues = previousColumns + newRowWidth + '%';
+        console.log(gridValues);
+        this.cssInputColumnsValue = { gridTemplateColumns: gridValues };
+      }, 5);
+    }
+  } */
+
+  gridTemplateColumnCzz(columnsInPercent, columnQuantity) {
 
     checkPercentTotal();
 
@@ -98,12 +132,12 @@ export class DatatableComponent implements OnInit {
       }, 5);
     }
   }
-
   applyCleanse(cleanseType: string, inputRow: Field) {
     console.log(cleanseType, inputRow);
+
   }
 
-  setColumns(qty: number) {
+/*   setColumns(qty: number) {
     const colPercentWidths = Math.round(100 / qty);
     const arr = [];
     if (qty > 1) {
@@ -116,8 +150,22 @@ export class DatatableComponent implements OnInit {
     }
 
     this.gridTemplateColumnCss(arr, qty);
-  }
+  } */
 
+  setColumnz(qty: number) {
+    const colPercentWidths = Math.round(100 / qty);
+    const arr = [];
+    if (qty > 1) {
+      for (let i = 0; i < qty; i++) {
+        arr.push(colPercentWidths);
+      }
+    } else {
+      arr.push('auto');
+      this.inputColumns = arr;
+    }
+
+    this.gridTemplateColumnCzz(arr, qty);
+  }
   openDialog(): void {
     const dialogRef = this.dialog.open(FunctionDialogComponent, {
       width: '250px',
@@ -133,18 +181,18 @@ export class DatatableComponent implements OnInit {
     this.drawerIsOpen = isOpen;
   }
 
-  getDatatableForm(inputTable: DataSet[]) {
-    if (inputTable.length > 0) {
-      this.inputRows = inputTable[0].fields;
-      console.log(this.inputRows);
-      this.inputRows.map(field => {
-        if (typeof this.datatableForm === 'undefined') {
+  getDatatableForm(inputRows: InputRow[]) {
+    if (inputRows.length > 0) {
+
+      this.inputRows.map(row => {
+        console.log(row);
+        /* if (typeof this.datatableForm === 'undefined') {
           this.datatableForm = new FormGroup({
             [field.name]: new FormControl(null)
           });
         } else {
           this.datatableForm.addControl(field.name, new FormControl(null));
-        }
+        } */
       });
     }
   }
