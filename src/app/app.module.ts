@@ -29,9 +29,10 @@ import { InputCellComponent } from './datatable/input-table/input-row/input-cell
 import { OutputRowComponent } from './datatable/output-table/output-row/output-row.component';
 import { OutputCellComponent } from './datatable/output-table/output-row/output-cell/output-cell.component';
 import { DatatableService } from './services/datatable.service';
-import { DataManagementService } from './services/data-management.service';
 import { ToolCellComponent } from './datatable/tool-cell/tool-cell.component';
 import { FunctionDialogComponent } from './function-dialog/function-dialog.component';
+import { CellTableManagementService } from './services/cell-table-management.service';
+import { SafePipe } from './pipes/safe.pipe';
 
 
 @NgModule({
@@ -53,7 +54,8 @@ import { FunctionDialogComponent } from './function-dialog/function-dialog.compo
     OutputRowComponent,
     OutputCellComponent,
     ToolCellComponent,
-    FunctionDialogComponent
+    FunctionDialogComponent,
+    SafePipe
   ],
   entryComponents: [FunctionDialogComponent],
   imports: [
@@ -66,7 +68,7 @@ import { FunctionDialogComponent } from './function-dialog/function-dialog.compo
     ReactiveFormsModule,
     !environment.production ? StoreDevtoolsModule.instrument({ maxAge: 50 }) : []
   ],
-  providers: [DatatableService, DataManagementService],
+  providers: [DatatableService, CellTableManagementService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

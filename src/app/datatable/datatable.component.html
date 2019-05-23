@@ -1,46 +1,37 @@
 <form>
   <div class="dtable-content">
     <mat-drawer-container class="toolbox-container" autosize>
-      <div class="input-gridb">
-        <!--<div class="header-row">-->
-          <div class="header-row" [ngClass]="{'toolbox-open': drawerIsOpen}"> 
-              filler
+      <div class="input-grid">
+        <div class="header-row" [ngClass]="{'toolbox-open': drawerIsOpen}">
+          <div class="tools-header">
           </div>
-        <div class="tools-header">
-            <button mat-button type="button" (click)="drawer.toggle()" class="">
-              <mat-icon *ngIf="drawerIsOpen">close</mat-icon>
-              <mat-icon *ngIf="!drawerIsOpen">build</mat-icon>
+          <button mat-flat-button type="button" (click)="drawer.toggle()" class="tools-button">
+            <mat-icon *ngIf="drawerIsOpen">close</mat-icon>
+            <mat-icon *ngIf="!drawerIsOpen">build</mat-icon>
+          </button> 
+        </div>
+        <div class="input-rows" *ngFor="let inputRow of inputObject.rows" [style]="stepCountCss | safe: 'style'">
+          <div class="input-cell" *ngFor="let step of inputRow.steps" [style]="step.style | safe: 'style'">
+            <span class="cell-label">{{step.postStep}}</span>
+          </div>
+          <div class="tools-column">
+            <mat-menu #cleanseMenu="matMenu" yPosition="below" xPosition="before">
+              <button
+                *ngFor="let cleanseOption of inputRow.cleanseOperations"
+                mat-menu-item
+                [matTooltip]="tooltipObj.cleanseTooltip.trim"
+                matTooltipPosition="left"
+                [matTooltipClass]="{'toolbox-tooltip cleanse-tooltip': true}"
+                (click)="applyCleanse(cleanseOption.name, inputRow.id)">
+                <mat-icon>{{cleanseOption.icon}}</mat-icon>
+              </button>
+            </mat-menu>
+            <button mat-icon-button [matMenuTriggerFor]="cleanseMenu">
+              <mat-icon>more_vert</mat-icon>
             </button>
-        </div>
-        <div class="input-rows ngrepeat-------1a">
-          <div class="input-cell ngrepeat---------1b" style="grid-column: 1 / 2;">ACCOUNT_NUMBER</div>
-          <div class="input-cell ngrepeat---------1b" style="grid-column: 2 / span 3;">account_number</div>
-        </div>
-        <div class="tools-column ngrepeat-------2a">
-          <button mat-button >r1.c2</button>
-        </div>
-        <div class="input-rows ngrepeat-------1a">
-          <div class="input-cell ngrepeat---------1b" style="grid-column: 1 / span 4">BALANCE</div>
-        </div>
-        <div class="tools-column ngrepeat-------2a">
-            <button mat-button >r2.c2</button>
           </div>
-        <div class="input-rows ngrepeat">
-            <div class="input-cell ngrepeat------3" style="grid-column: 1 / span 2">row2 - col1</div>
-            <div class="input-cell ngrepeat------3" style="grid-column: 3 / 4">row2 - col2</div>
-            <div class="input-cell ngrepeat------3">row2 - col3</div>
         </div>
-        <div class="tools-column ngrepeat-------4">
-            <button mat-button >r3.c2</button>
-          </div>
-        <div class="input-rows ngrepeat">
-            <div class="input-cell ngrepeat------3" style="grid-column: 3 / 4">row2 - col2</div>
-            <div class="input-cell ngrepeat------3">row2 - col3</div>
-        </div>
-        <div class="tools-column ngrepeat-------4">
-            <button mat-button >r4.c2</button>
-          </div>
-      </div>
+    </div>
     <!--
       <div class="input-grid" style="grid-template-columns: auto 65px; grid-template-rows: auto auto;">
           <div *ngFor="let inputRow of inputRows.rows; index as j" class="input-row" [ngClass]="{ 'no-top-row-border': j === 0}">

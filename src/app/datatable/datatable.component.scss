@@ -32,30 +32,17 @@
         }
     }
 
-    .input-row, .output-row {
+    .output-row {
         display: grid;
         &.no-top-row-border {
             border-top-color: $primary-foreground;
         }
-        .input-cell-container {
-            background-color: $primary-foreground;
-
-            .input-cell-cleanse {
-                background-color: $primary-foreground;
-                color: $accent-light;
-                max-width: 65px;
-                height: 65px;
-            }
-        }
-        .input-cell {
-            box-shadow: 0px 0px 5px 0px rgba(0,0,0,.3);
-            z-index: 999;
-        }
+        
         .output-cell {
             width: 100%;
         }
 
-        .input-cell, .output-cell {
+        .output-cell {
             border: 0 none;
             border-bottom: 2px solid $accent-light;
             border-right: 1px solid $accent-light;
@@ -66,17 +53,11 @@
             transition-timing-function: ease;
             background-color: $primary-foreground;
 
-            
-
-            &.ancestor-cell {
-                background-color: $accent-light;
-            }
-
             button.toolbox-button {
                 width: 30px;
             }
 
-            .toolbox-open, &.ancestor-cell{
+            .toolbox-open {
                 
                 border: 0 none transparent;
                 color: $accent-mid;
@@ -99,11 +80,6 @@
         }
     }
 
-    .input-row {
-        // grid-template-rows: auto;
-        // grid-template-columns: auto auto;
-    }
-
     /deep/ .mat-drawer-container,
     .mat-drawer {
         background-color: transparent;
@@ -121,8 +97,6 @@
             border-right: none;
         }
     }
-
-    
 
     .toolbox-controls {
         display: flex;
@@ -142,45 +116,52 @@
         box-shadow: -5px 0px 5px 0px rgba(0,0,0,.3);
         z-index: 99;
     }
+
     .input-grid {
         display: grid;
-    }
-
-    .input-gridb {
-        border: 2px solid #ff0;
-        display: grid;
-        grid-template-columns: auto 65px;
-        grid-template-rows: 65px auto-fill;
+        grid-template-columns: auto;
+        grid-template-rows: 40px auto-fill;
         box-sizing: border-box;
        
         .input-rows, .header-row {
-            border: 2px solid #00f;
-            width: auto;
+            display: grid;
+            border-bottom: 2px solid $accent-light;
         }
         .header-row {
-            height: 65px;
+            grid-template-rows: 40px;
+            grid-template-columns: auto 65px;
+            height: 40px;
             background-color: $accent;
+            .tools-header {
+                height: 40px;
+                background-color: $accent;
+
+                .tools-button {
+                    margin-top: 10px;
+                    background-color: $accent-light;
+                }
+        }
         }
         .input-rows {
-            background-color: orangered;
+            background-color: $accent-mid;
             color: white;
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: 65px;
+            grid-template-rows: 50px;
             .input-cell {
                 padding: 5px;
-                background-color: yellow;
-                border: 2px solid black;
-                color: black;
-                height: 65px;
+                background-color: $primary-foreground;
+                border-right: 2px solid $accent-light;
+                height: 50px;
                 box-sizing: border-box;
+                & > * {
+                    color: $accent-mid;
+                }
             }
         }
         .tools-column, .tools-header {
-            border: 2px solid #000;
             max-width: 65px;
-            height: 65px;
         }
+        
         
     }
 

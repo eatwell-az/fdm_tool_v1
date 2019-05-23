@@ -6,46 +6,51 @@ export interface CellData {
     nextSibling: any;
     prevSibling: any;
 }
-
 export interface Base {
     id: number;
     name: string;
 }
-
 export interface BusinessProcess extends Base {
     id: number;
     name: string;
 }
-
 export interface System extends Base {
     id: number;
     name: string;
 }
-
 export interface DataSet extends Base {
     id: number;
     name: string;
     type: string;
     systems: Array<System>;
-    fields: Array<Field>;
+    fields: any;
 }
-
 export interface Field extends Base {
     id: number;
     name: string;
     dataType: string;
     length: number;
     businessProcesses: Array<BusinessProcess>;
-    cellData: CellData;
 }
-
 export interface InputRow {
+    field: Field;
     id: number;
-    order: number;
-    step: Step[];
-    cleanse: CleanseOperation[];
-    cssGridValue: { gridTemplateColumns: string };
+    sortOrder: number;
+    cleanseOperations: CleanseOperation[];
+    currentValue: any;
+    steps: Step[];
 }
 export interface Step {
-    [order: number]: { cssGridCol: string, cssGridRow: string, product: string | number, anticedent: number };
+    id: number;
+    type: string;
+    operationSourceId: number;
+    preStep: any;
+    style: string;
+    postStep: any;
+    sortOrder: number;
+}
+
+export interface InputObject {
+    currentStepCount: number;
+    rows: InputRow[];
 }
