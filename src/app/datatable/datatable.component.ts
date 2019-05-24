@@ -24,7 +24,8 @@ export class DatatableComponent implements OnInit {
   outputTable: DataSet[];
   datatableForm: FormGroup;
   drawerIsOpen = false;
-  stepCountCss = 'grid-template-columns: repeat(' + this.datatableService.currentStep + ', 1fr) 65px';
+
+  stepCountCss = 'grid-template-columns: repeat(' + this.cellManagement.currentStepCount + ', 1fr) 65px';
   tooltipObj = {
     cleanseTooltip: {
       general: 'Cleanse...',
@@ -43,7 +44,7 @@ export class DatatableComponent implements OnInit {
 
   constructor(
     private datatableService: DatatableService,
-    private cellManagement: CellTableManagementService,
+    public cellManagement: CellTableManagementService,
     public dialog: MatDialog,
     private safe: SafePipe) { }
 
@@ -52,18 +53,17 @@ export class DatatableComponent implements OnInit {
     this.outputTable = this.datatableService.dataSets.filter(outputTable => outputTable.type === 'TABLE');
 
     const { fields } = this.inputTable[0];
-    this.inputObject = this.datatableService.getInputObject(fields);
+    this.inputObject = this.cellManagement.buildInputObject(fields);
 
     if (this.outputTable.length > 0) {
       for (const outputRow of this.outputTable) {
         this.outputRows = outputRow.fields;
       }
     }
-    // this.getDatatableForm(this.inputRows);
-
   }
 
-/*   gridTemplateColumnCss(columnsInPercent, columnQuantity) {
+  /*
+  gridTemplateColumnCss(columnsInPercent, columnQuantity) {
 
     checkPercentTotal();
 
@@ -94,56 +94,44 @@ export class DatatableComponent implements OnInit {
         this.cssInputColumnsValue = { gridTemplateColumns: gridValues };
       }, 5);
     }
-  } */
+  }
+  */
 
   applyCleanse(cleanseType: string, inputRowId: number) {
-    const newStep = this.makeNewStep();
-    for (let i = 0; i < this.inputObject.rows.length; i++) {
-      if( inputRowId === this.inputObject.rows[i].id) {
-        this.inputObject.rows[i].steps.push(newStep);
+    let stepIcon: string;
 
-        this.cellManagement.currentStepCount = this.cellManagement.currentStepCount + 1;
-        this.inputObject.currentStepCount = this.inputObject.currentStepCount + 1;
-      }
-      // row[i].steps.push(newStep);
+    if (cleanseType === 'trim') {
+      stepIcon = 'crop';
+    } else if (cleanseType === 'case') {
+      stepIcon = 'text_format';
+    } else if (cleanseType === 'round') {
+      stepIcon = 'all_out';
     }
 
+    const currentRowValue = this.inputObject.rows.filter(row => row.id === inputRowId);
     const newStepPackage: NewStepPackage = {
-      data: cleanseType,
+      postStep: currentRowValue[0].currentValue,
       inputRowId,
-      stepType: 'CLEANSING'
+      stepType: 'CLEANSING',
+      data: cleanseType,
     };
 
-    this.stepCountCss = 'grid-template-columns: repeat(' + this.inputObject.currentStepCount + ', 1fr) 65px';
-  }
+    this.cellManagement.remodelSteps(this.inputObject, inputRowId);
 
-  makeNewStep(): Step {
-    const step: Step = {
-      id: 2,
-      operationSourceId: 1,
-      postStep: 'New Step!',
-      preStep: 'pre',
-      sortOrder: 2,
-      style: 'grid-column: 2 / 3',
-      type: 'CLEANSING'
-    };
+    for (let i = 0; i < this.inputObject.rows.length; i++) {
+      if (inputRowId === this.inputObject.rows[i].id) {
+        newStepPackage.appliedToStep = this.inputObject.rows[i].steps[this.inputObject.rows[i].steps.length - 1];
+        const newStep = this.cellManagement.makeNewStep(newStepPackage, stepIcon);
 
-    return step;
-  }
-/*   setColumns(qty: number) {
-    const colPercentWidths = Math.round(100 / qty);
-    const arr = [];
-    if (qty > 1) {
-      for (let i = 0; i < qty; i++) {
-        arr.push(colPercentWidths);
+        for (const cleanseOption of this.inputObject.rows[i].cleanseOperations) {
+          if (cleanseOption.name === cleanseType) {
+            cleanseOption.isApplied = true;
+          }
+        }
+        this.inputObject.rows[i].steps.push(newStep);
       }
-    } else {
-      arr.push('auto');
-      this.inputColumns = arr;
     }
-
-    this.gridTemplateColumnCss(arr, qty);
-  } */
+  }
 
   openDialog(): void {
     const dialogRef = this.dialog.open(FunctionDialogComponent, {
@@ -152,34 +140,19 @@ export class DatatableComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed: ', result);
+      this.cellManagement.addRow();
     });
   }
 
   drawerChanged(isOpen: boolean) {
     this.drawerIsOpen = isOpen;
   }
-
-  getDatatableForm(inputRows: InputRow[]) {
-    if (inputRows.length > 0) {
-
-      /*this.inputRows.map(row => {
-         if (typeof this.datatableForm === 'undefined') {
-          this.datatableForm = new FormGroup({
-            [field.name]: new FormControl(null)
-          });
-        } else {
-          this.datatableForm.addControl(field.name, new FormControl(null));
-        } 
-      });*/
-    }
-  }
-
-
 }
 
 export interface NewStepPackage {
   stepType: string;
+  postStep: any;
   data: any;
+  appliedToStep?: Step;
   inputRowId: number;
 }

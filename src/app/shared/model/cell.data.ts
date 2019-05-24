@@ -1,11 +1,5 @@
 import { CleanseOperation } from './cleanse.operation';
 
-export interface CellData {
-    isParent: boolean;
-    isOriginal: boolean;
-    nextSibling: any;
-    prevSibling: any;
-}
 export interface Base {
     id: number;
     name: string;
@@ -32,6 +26,16 @@ export interface Field extends Base {
     length: number;
     businessProcesses: Array<BusinessProcess>;
 }
+
+export interface FormulaField extends Field {
+    id: number;
+    name: string;
+    dataType: string;
+    length: number;
+    businessProcesses: Array<BusinessProcess>;
+    formula: string;
+    dependsOn: Field[] | FormulaField[];
+}
 export interface InputRow {
     field: Field;
     id: number;
@@ -46,11 +50,13 @@ export interface Step {
     operationSourceId: number;
     preStep: any;
     style: string;
+    startColumn: number;
+    endColumn: number;
     postStep: any;
     sortOrder: number;
+    stepIcon: string;
 }
 
 export interface InputObject {
-    currentStepCount: number;
     rows: InputRow[];
 }

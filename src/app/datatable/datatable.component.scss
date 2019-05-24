@@ -136,34 +136,60 @@
                 height: 40px;
                 background-color: $accent;
 
-                .tools-button {
-                    margin-top: 10px;
-                    background-color: $accent-light;
-                }
-        }
+                
+            }
+            .tools-button {
+                margin-top: 10px;
+                background-color: $accent-light;
+                border-bottom-left-radius: 0px;
+                border-bottom-right-radius: 0px;
+            }
         }
         .input-rows {
             background-color: $accent-mid;
             color: white;
             display: grid;
             grid-template-rows: 50px;
+            transition: width 0.5s ease;
             .input-cell {
                 padding: 5px;
                 background-color: $primary-foreground;
-                border-right: 2px solid $accent-light;
+                border: 2px solid $accent-mid;
                 height: 50px;
                 box-sizing: border-box;
-                & > * {
+                color: black;
+                display: flex;
+
+                &.ancestor-cell {
                     color: $accent-mid;
+                    border: 2px solid $accent-light;
+                }
+                & > .cell-icon {
+                    color: $accent-light;
                 }
             }
         }
         .tools-column, .tools-header {
             max-width: 65px;
-        }
-        
-        
+            background-color: $accent-light;
+        }        
     }
-
 }
 
+.cleanse-option-disabled {
+    cursor: not-allowed;
+    color: $accent-mid;
+}
+
+button.mat-menu-item {
+    background-color: $accent-light;
+    text-align: center;
+}
+/deep/ .cleanse-menu {
+    background-color: $accent-light;
+}
+
+/deep/ .toolbox-tooltip.cleanse-tooltip {
+    background-color: $accent-mid;
+    color: $primary-foreground !important;
+}

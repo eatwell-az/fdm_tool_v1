@@ -10,20 +10,22 @@
             <mat-icon *ngIf="!drawerIsOpen">build</mat-icon>
           </button> 
         </div>
-        <div class="input-rows" *ngFor="let inputRow of inputObject.rows" [style]="stepCountCss | safe: 'style'">
-          <div class="input-cell" *ngFor="let step of inputRow.steps" [style]="step.style | safe: 'style'">
+        <div class="input-rows" *ngFor="let inputRow of inputObject.rows" [style]="'grid-template-columns: repeat(' + cellManagement.currentStepCount + ', 1fr) 65px' | safe: 'style'">
+          <div class="input-cell" *ngFor="let step of inputRow.steps; index as i" [style]="step.style + step.startColumn + ' / ' + step.endColumn | safe: 'style'" [ngClass]="{'ancestor-cell': i !== inputRow.steps.length - 1}">
             <span class="cell-label">{{step.postStep}}</span>
+            <mat-icon class="cell-icon" *ngIf="step.stepIcon">{{step.stepIcon}}</mat-icon>
           </div>
           <div class="tools-column">
-            <mat-menu #cleanseMenu="matMenu" yPosition="below" xPosition="before">
+            <mat-menu #cleanseMenu="matMenu" yPosition="below" xPosition="before" class="cleanse-menu">
               <button
-                *ngFor="let cleanseOption of inputRow.cleanseOperations"
+                *ngFor="let cleanseOption of inputRow.cleanseOperations; index as c"
                 mat-menu-item
-                [matTooltip]="tooltipObj.cleanseTooltip.trim"
+                [matTooltip]="tooltipObj.cleanseTooltip[cleanseOption.name]"
                 matTooltipPosition="left"
                 [matTooltipClass]="{'toolbox-tooltip cleanse-tooltip': true}"
-                (click)="applyCleanse(cleanseOption.name, inputRow.id)">
-                <mat-icon>{{cleanseOption.icon}}</mat-icon>
+                (click)="applyCleanse(cleanseOption.name, inputRow.id)"
+                [disabled]="cleanseOption.isApplied">
+                <mat-icon [ngClass]="{'cleanse-option-disabled': cleanseOption.isApplied}">{{cleanseOption.icon}}</mat-icon>
               </button>
             </mat-menu>
             <button mat-icon-button [matMenuTriggerFor]="cleanseMenu">
@@ -31,67 +33,7 @@
             </button>
           </div>
         </div>
-    </div>
-    <!--
-      <div class="input-grid" style="grid-template-columns: auto 65px; grid-template-rows: auto auto;">
-          <div *ngFor="let inputRow of inputRows.rows; index as j" class="input-row" [ngClass]="{ 'no-top-row-border': j === 0}">
-    -->
-            <!-- grid calc's change on new steps -->
-            <!-- 
-              <div *ngFor="let step of inputRow.steps; index as i"
-                #inputcell
-                class="input-cell"
-                [ngClass]="{'toolbox-open': drawerIsOpen, 'ancestor-cell': i < inputRow.steps.length - 1 }">
-                {{ step.postStep }}
-              </div>
-            -->
-          <!-- <button
-            *ngFor="let cleanse of inputRow.cleanseOperations;"
-            mat-button
-            class="input-cell-cleanse"
-            #tooltip="matTooltip"
-            [matTooltip]="cleanse.id"
-            matTooltipPosition="left"
-            [disabled]="cleanse.isApplied"
-            [matTooltipClass]="{'toolbox-tooltip cleanse-tooltip': true}">
-            <mat-icon>
-              {{cleanse.icon}}
-            </mat-icon>
-          </button>
-          <button
-            *ngIf="inputRow.dataType === 'CHARACTER'"
-            class="input-cell-cleanse"
-            mat-button
-            #tooltip="matTooltip"
-            [matTooltip]="tooltipObj.cleanseTooltip.case"
-            matTooltipPosition="left"
-            [matTooltipClass]="{'toolbox-tooltip cleanse-tooltip': true}">
-            <mat-icon>text_format</mat-icon>
-          </button>
-          <button
-            *ngIf="inputRow.dataType === 'NUMERIC'"
-            class="input-cell-cleanse"
-            mat-button
-            #tooltip="matTooltip"
-            [matTooltip]="tooltipObj.cleanseTooltip.round"
-            matTooltipPosition="left"
-            [matTooltipClass]="{'toolbox-tooltip cleanse-tooltip': true}"
-            (click)="applyCleanse('ROUND_UP', inputRow)">
-            <mat-icon>all_out</mat-icon>
-          </button> -->
-        <!--
-           </div>
-        -->
-        <!--
-          <div class="dtable-header dtable-header-input" [ngClass]="{'toolbox-open': drawerIsOpen}" style="align-self: end;">
-          <button mat-button type="button" (click)="drawer.toggle()" class="dtable-header-tools">
-            <mat-icon *ngIf="drawerIsOpen">close</mat-icon>
-            <mat-icon *ngIf="!drawerIsOpen">build</mat-icon>
-          </button>
-        </div>
-       
-      </div> 
-      -->
+      </div>
       <mat-drawer
         #drawer
         class="toolbox-sidenav"
@@ -100,30 +42,26 @@
         (openedStart)="drawerChanged(true)"
         (closedStart)="drawerChanged(false)">
         <div class="dtable-header toolbox-controls">
-         
-          <!-- add [matMenuTriggerFor]="menuTest" to any element to trigger   -->
-          <!-- <button mat-button class="toolbox-button" [ngClass]="{'toolbox-open': drawerIsOpen, 'toolbox-hover': (drawerIsOpen && toolboxSelectPhase)}">x</button> -->
-            <button
-              mat-flat-button
-              class="toolbox-control"
-              (click)="openDialog()"
-              #tooltip="matTooltip"
-              [matTooltip]="tooltipObj.functionTooltip.general"
-              matTooltipPosition="left"
-              [matTooltipClass]="{'toolbox-tooltip cleanse-tooltip': true}">
-              <mat-icon>functions</mat-icon>
-            </button> 
-            <!-- (click)="setColumns(inputColumns.length + 1)" -->
-            <button
-              mat-flat-button 
-              class="toolbox-control"
-              #tooltip="matTooltip"
-              [matTooltip]="tooltipObj.decisionTable.general"
-              matTooltipPosition="left"
-              [matTooltipClass]="{'toolbox-tooltip cleanse-tooltip': true}">
-              <mat-icon>call_split</mat-icon>
-            </button>
-          
+          <button
+            mat-flat-button
+            class="toolbox-control"
+            (click)="openDialog()"
+            #tooltip="matTooltip"
+            [matTooltip]="tooltipObj.functionTooltip.general"
+            matTooltipPosition="left"
+            [matTooltipClass]="{'toolbox-tooltip cleanse-tooltip': true}">
+            <mat-icon>functions</mat-icon>
+          </button> 
+          <!-- (click)="setColumns(inputColumns.length + 1)" -->
+          <button
+            mat-flat-button 
+            class="toolbox-control"
+            #tooltip="matTooltip"
+            [matTooltip]="tooltipObj.decisionTable.general"
+            matTooltipPosition="left"
+            [matTooltipClass]="{'toolbox-tooltip cleanse-tooltip': true}">
+            <mat-icon>call_split</mat-icon>
+          </button>
         </div>
       </mat-drawer>
     </mat-drawer-container>

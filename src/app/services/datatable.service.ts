@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as json from '../../data/SampleData.json';
 import { BusinessProcess, System, DataSet, Field } from '../shared/model/cell.data';
-
 import { CellTableManagementService } from './cell-table-management.service.js';
-import { NewStepPackage } from '../datatable/datatable.component.js';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +13,8 @@ export class DatatableService {
   systems: System[] = [];
   dataSets: DataSet[] = [];
   inputFields: Field[] = [];
-  inputRowz: any;
 
-  constructor(private cellTableService: CellTableManagementService) {
+  constructor(private cellManagement: CellTableManagementService) {
 
     this.inputFile = this.getInputFile();
     const { businessProcesses } = this.inputFile.default;
@@ -26,163 +23,6 @@ export class DatatableService {
     this.setBusinessProcesses(businessProcesses);
     this.setSystems(systems);
     this.setDataSet(dataSets);
-    this.inputRowz = {
-      currentStepCount: 1,
-      rows: [
-        {
-          field: {
-            id: 1,
-            name: 'ACCOUNT_NUMBER',
-            dataType: 'CHARACTER',
-            length: 25,
-            businessProcesses: []
-          },
-          id: 1,
-          sortOrder: 1,
-          currentValue: 'account_number',
-          cleanseOperations: [
-            { dataType: 'CHARACTER', id: 1, icon: 'crop', name: 'trim', operation: null, isApplied: false },
-            { dataType: 'CHARACTER', id: 2, icon: 'text_format', name: 'case', operation: null, isApplied: true }
-          ],
-          steps: [
-            {
-              id: 1,
-              type: 'INPUT',
-              operationSourceId: -1,
-              preStep: null,
-              style: 'grid-column: 1 / 2',
-              postStep: 'ACCOUNT_NUMBER',
-              sortOrder: 1
-            },
-            {
-              id: 2,
-              type: 'CLEANSING',
-              operationSourceId: 2,
-              preStep: null,
-              style: 'grid-column: 2 / span 3',
-              postStep: 'account_number',
-              sortOrder: 1
-            }
-          ]
-        },
-        {
-          field: {
-            id: 2,
-            name: 'BALANCE',
-            dataType: 'NUMERIC',
-            length: 25,
-            businessProcesses: []
-          },
-          id: 2,
-          sortOrder: 2,
-          currentValue: 'BALANCE',
-          cleanseOperations: [
-            { dataType: 'NUMERIC', id: 3, icon: 'all_out', name: 'round', operation: null, isApplied: false }
-          ],
-          steps: [
-            {
-              id: 1,
-              type: 'INPUT',
-              operationSourceId: -1,
-              preStep: null,
-              style: 'grid-column: 1 / span 2',
-              postStep: 'BALANCE',
-              sortOrder: 1
-            },
-            {
-              id: 2,
-              type: 'CLEANSING',
-              operationSourceId: 3,
-              preStep: null,
-              style: 'grid-column: 3 / span 2',
-              postStep: 'BALANCE',
-              sortOrder: 1
-            }
-          ]
-        },
-        {
-          field: {
-            id: 3,
-            name: 'INTEREST_RATE',
-            dataType: 'NUMERIC',
-            length: 25,
-            businessProcesses: [{id: 1}, {id: 2}]
-          },
-          id: 3,
-          sortOrder: 3,
-          currentValue: 'INTEREST_RATE',
-          cleanseOperations: [
-            { dataType: 'NUMERIC', id: 3, icon: 'all_out', name: 'round', operation: null, isApplied: false }
-          ],
-          steps: [
-            {
-              id: 1,
-              type: 'INPUT',
-              operationSourceId: -1,
-              preStep: null,
-              style: 'grid-column: 1 / span 2',
-              postStep: 'INTEREST_RATE',
-              sortOrder: 1
-            },
-            {
-              id: 3,
-              type: 'FORMULA',
-              name: 'SCALED_INTEREST_RATE',
-              formula: 'INTEREST_RATE * 100',
-              operationSourceId: 1,
-              preStep: null,
-              style: 'grid-column: 4/5',
-              postStep: 'account_number',
-              sortOrder: 2
-            }
-          ]
-        },
-        {
-          field: {
-            id: 3,
-            name: 'INTEREST_RATE',
-            dataType: 'NUMERIC',
-            length: 25,
-            businessProcesses: [{id: 1}, {id: 2}]
-          },
-          id: 3,
-          sortOrder: 3,
-          currentValue: 'INTEREST_RATE',
-          cleanseOperations: [
-            { dataType: 'NUMERIC', id: 3, icon: 'all_out', name: 'round', operation: null, isApplied: false }
-          ],
-          steps: [
-            {
-              id: 1,
-              type: 'INPUT',
-              operationSourceId: -1,
-              preStep: null,
-              style: 'grid-column: 1 / span 2',
-              postStep: 'INTEREST_RATE',
-              sortOrder: 1
-            },
-            {
-              id: 3,
-              type: 'FORMULA',
-              name: 'SCALED_INTEREST_RATE',
-              formula: 'INTEREST_RATE * 100',
-              operationSourceId: 1,
-              preStep: null,
-              style: 'grid-column: 4/5',
-              postStep: 'account_number',
-              sortOrder: 2
-            }
-          ]
-        }
-      ]
-    };
-  }
-  get currentStep() {
-    console.log('get', this.cellTableService.currentStepCount);
-    return this.cellTableService.currentStepCount;
-  }
-  set currentStep(stepCount: number) {
-    this.cellTableService.currentStepCount = stepCount;
   }
 
   getDatatable() {
@@ -228,7 +68,7 @@ export class DatatableService {
         const dataset: DataSet = {id, name, type, systems, fields: newFields};
         this.dataSets.push(dataset);
       }
-      this.getInputObject(newFields);
+      this.cellManagement.buildInputObject(newFields);
     }
   }
 
@@ -248,7 +88,4 @@ export class DatatableService {
     return fields;
   }
 
-  getInputObject(fields: Field[]) {
-    return this.cellTableService.buildInputRows(fields);
-  }
 }

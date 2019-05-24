@@ -14,3 +14,27 @@ export const CLEANSE_OPERATIONS: CleanseOperation[] = [
     { dataType: 'CHARACTER', id: 2, icon: 'text_format', name: 'case', operation: null, isApplied: false },
     { dataType: 'NUMERIC', id: 3, icon: 'all_out', name: 'round', operation: null, isApplied: false }
   ];
+
+export class CleanseOption implements CleanseOperation {
+    id: number;
+    dataType: string;
+    name: string;
+    icon: string;
+    operation: Pipe;
+    isApplied: boolean;
+    constructor(
+        id: number,
+        dataType: string,
+        name: string,
+        icon: string,
+        operation: Pipe,
+        isApplied: boolean
+    ) { 
+        this.id = id;
+        this.dataType = dataType;
+        this.name = name;
+        this.icon = icon;
+        this.operation = operation;
+        this.isApplied = isApplied;
+    }
+}
