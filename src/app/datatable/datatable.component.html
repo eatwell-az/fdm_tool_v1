@@ -11,21 +11,24 @@
           </button> 
         </div>
         <div class="input-rows" *ngFor="let inputRow of inputObject.rows" [style]="'grid-template-columns: repeat(' + cellManagement.currentStepCount + ', 1fr) 65px' | safe: 'style'">
-          <div class="input-cell" *ngFor="let step of inputRow.steps; index as i" [style]="step.style + step.startColumn + ' / ' + step.endColumn | safe: 'style'" [ngClass]="{'ancestor-cell': i !== inputRow.steps.length - 1}">
-            <span class="cell-label">{{step.postStep}}</span>
-            <mat-icon class="cell-icon" *ngIf="step.stepIcon">{{step.stepIcon}}</mat-icon>
-          </div>
+          
+
+          <!-- <div class="input-cell" *ngFor="let step of inputRow.steps; index as i" [style]="step.style + step.startColumn + ' / ' + step.endColumn | safe: 'style'" [ngClass]="{'ancestor-cell': i !== inputRow.steps.length - 1}" (click)="_makeNewFormulaRow(step, inputRow)"> -->
+            <button mat-flat-button class="input-cell" *ngFor="let step of inputRow.steps; index as i" [style]="step.style + step.startColumn + ' / ' + step.endColumn | safe: 'style'" [ngClass]="{'ancestor-cell': i !== inputRow.steps.length - 1}" (click)="_makeNewFormulaRow(step, inputRow)">
+            <span class="cell-label">{{step.postStep}}</span>&nbsp;
+            <mat-icon class="cell-icon" *ngIf="step.stepIcon">{{step.stepIcon.materialIconName}}</mat-icon>
+          </button>
           <div class="tools-column">
             <mat-menu #cleanseMenu="matMenu" yPosition="below" xPosition="before" class="cleanse-menu">
               <button
-                *ngFor="let cleanseOption of inputRow.cleanseOperations; index as c"
+                *ngFor="let cleanseOperation of inputRow.cleanseOperations"
                 mat-menu-item
-                [matTooltip]="tooltipObj.cleanseTooltip[cleanseOption.name]"
+                [matTooltip]="tooltipObj.cleanseTooltip[cleanseOperation.name]"
                 matTooltipPosition="left"
                 [matTooltipClass]="{'toolbox-tooltip cleanse-tooltip': true}"
-                (click)="applyCleanse(cleanseOption.name, inputRow.id)"
-                [disabled]="cleanseOption.isApplied">
-                <mat-icon [ngClass]="{'cleanse-option-disabled': cleanseOption.isApplied}">{{cleanseOption.icon}}</mat-icon>
+                (click)="_applyCleanse(cleanseOperation, inputRow)"
+                [disabled]="cleanseOperation.isApplied">
+                <mat-icon [ngClass]="{'cleanse-option-disabled': cleanseOperation.isApplied}">{{cleanseOperation.icon}}</mat-icon>
               </button>
             </mat-menu>
             <button mat-icon-button [matMenuTriggerFor]="cleanseMenu">

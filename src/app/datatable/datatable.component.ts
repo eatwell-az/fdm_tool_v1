@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DatatableService } from '../services/datatable.service';
-import { DataSet, Field, InputRow, InputObject, Step } from '../shared/model/cell.data';
+import { DataSet, Field, InputRow, InputObject, Step, ICONS } from '../shared/model/cell.data';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTooltip } from '@angular/material';
 import { FunctionDialogComponent } from '../function-dialog/function-dialog.component';
@@ -51,9 +51,10 @@ export class DatatableComponent implements OnInit {
   ngOnInit() {
     this.inputTable = this.datatableService.dataSets.filter(inputTable => inputTable.type === 'FILE');
     this.outputTable = this.datatableService.dataSets.filter(outputTable => outputTable.type === 'TABLE');
-
+    console.log(this.inputTable);
     const { fields } = this.inputTable[0];
-    this.inputObject = this.cellManagement.buildInputObject(fields);
+    // this.inputObject = this.cellManagement.buildInputObject(fields);
+    this.inputObject = this.cellManagement._makeInputObject(fields);
 
     if (this.outputTable.length > 0) {
       for (const outputRow of this.outputTable) {
@@ -62,8 +63,7 @@ export class DatatableComponent implements OnInit {
     }
   }
 
-  /*
-  gridTemplateColumnCss(columnsInPercent, columnQuantity) {
+  /*gridTemplateColumnCss(columnsInPercent, columnQuantity) {
 
     checkPercentTotal();
 
@@ -94,11 +94,21 @@ export class DatatableComponent implements OnInit {
         this.cssInputColumnsValue = { gridTemplateColumns: gridValues };
       }, 5);
     }
+  }*/
+  _makeNewFormulaRow(step: Step, inputRow: InputRow) {
+    const icon = ICONS.find(i => i.name === 'dependent');
+    this.cellManagement._updateInputRow(inputRow, icon);
   }
-  */
 
-  applyCleanse(cleanseType: string, inputRowId: number) {
-    let stepIcon: string;
+  _applyCleanse(cleanseOption: CleanseOperation, inputRow: InputRow) {
+    const currentRowValue = this.inputObject.rows.filter(row => row.id === inputRow.id);
+    const icon = ICONS.find(i => i.name === cleanseOption.name);
+    this.cellManagement._updateInputRow(inputRow, icon);
+    // this.cellManagement._remodelSteps();
+  }
+
+  /*applyCleanse(cleanseType: string, inputRowId: number) {
+    let stepIcon: Icon;
 
     if (cleanseType === 'trim') {
       stepIcon = 'crop';
@@ -113,7 +123,7 @@ export class DatatableComponent implements OnInit {
       postStep: currentRowValue[0].currentValue,
       inputRowId,
       stepType: 'CLEANSING',
-      data: cleanseType,
+      data: cleanseType
     };
 
     this.cellManagement.remodelSteps(this.inputObject, inputRowId);
@@ -131,7 +141,7 @@ export class DatatableComponent implements OnInit {
         this.inputObject.rows[i].steps.push(newStep);
       }
     }
-  }
+  }*/
 
   openDialog(): void {
     const dialogRef = this.dialog.open(FunctionDialogComponent, {
@@ -140,7 +150,7 @@ export class DatatableComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.cellManagement.addRow();
+      // this.cellManagement.addRow();
     });
   }
 
@@ -153,6 +163,6 @@ export interface NewStepPackage {
   stepType: string;
   postStep: any;
   data: any;
-  appliedToStep?: Step;
+  appliedToStep?: Step | null;
   inputRowId: number;
 }

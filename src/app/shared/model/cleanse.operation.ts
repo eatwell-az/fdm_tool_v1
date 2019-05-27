@@ -1,4 +1,4 @@
-import { Base } from './cell.data';
+import { Base, Icon, ICONS } from './cell.data';
 import { Pipe } from '@angular/compiler/src/core';
 
 export interface CleanseOperation extends Base {
@@ -9,6 +9,7 @@ export interface CleanseOperation extends Base {
     operation: Pipe;
     isApplied: boolean;
 }
+
 export const CLEANSE_OPERATIONS: CleanseOperation[] = [
     { dataType: 'CHARACTER', id: 1, icon: 'crop', name: 'trim', operation: null, isApplied: false },
     { dataType: 'CHARACTER', id: 2, icon: 'text_format', name: 'case', operation: null, isApplied: false },
@@ -29,7 +30,7 @@ export class CleanseOption implements CleanseOperation {
         icon: string,
         operation: Pipe,
         isApplied: boolean
-    ) { 
+    ) {
         this.id = id;
         this.dataType = dataType;
         this.name = name;

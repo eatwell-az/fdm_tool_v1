@@ -27,6 +27,12 @@ export interface Field extends Base {
     businessProcesses: Array<BusinessProcess>;
 }
 
+export interface FormulaDependency {
+    order: number;
+    row: InputRow;
+    step?: Step;
+}
+
 export interface FormulaField extends Field {
     id: number;
     name: string;
@@ -34,7 +40,7 @@ export interface FormulaField extends Field {
     length: number;
     businessProcesses: Array<BusinessProcess>;
     formula: string;
-    dependsOn: Field[] | FormulaField[];
+    dependsOn: FormulaDependency[];
 }
 export interface InputRow {
     field: Field;
@@ -43,6 +49,11 @@ export interface InputRow {
     cleanseOperations: CleanseOperation[];
     currentValue: any;
     steps: Step[];
+    type: RowType;
+}
+export enum RowType {
+    Input,
+    Formula
 }
 export interface Step {
     id: number;
@@ -54,9 +65,36 @@ export interface Step {
     endColumn: number;
     postStep: any;
     sortOrder: number;
-    stepIcon: string;
+    stepIcon: Icon;
 }
 
 export interface InputObject {
     rows: InputRow[];
 }
+
+export interface Icon {
+    materialIconName: string;
+    style: string;
+    type: string;
+    name: string;
+}
+
+export const ICONS: Icon[] = [
+    { name: 'round', materialIconName: 'all_out', style: '', type: 'CLEANSING' },
+    { name: 'trim', materialIconName: 'crop', style: '', type: 'CLEANSING' },
+    { name: 'case', materialIconName: 'case', style: '', type: 'CLEANSING' },
+    { name: 'input', materialIconName: 'input', style: '', type: 'INPUT' },
+    { name: 'formula', materialIconName: 'functions', style: '', type: 'FORMULA' },
+    { name: 'dependent', materialIconName: 'device_hub', style: '', type: 'FORMULA' }
+];
+
+export const TOOLTIP_OBJECT = {
+    cleanseMenu: 'Cleanse...',
+    trim: 'Trim',
+    case: 'Lower Case',
+    round: 'Round',
+    input: 'Input',
+    dependent: 'This cell is dependent on another...',
+    functionMenu: 'Function...',
+    decisionTable: 'Decision Table...'
+};

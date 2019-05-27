@@ -151,14 +151,15 @@
             display: grid;
             grid-template-rows: 50px;
             transition: width 0.5s ease;
-            .input-cell {
+            button.input-cell {
                 padding: 5px;
                 background-color: $primary-foreground;
                 border: 2px solid $accent-mid;
                 height: 50px;
                 box-sizing: border-box;
-                color: black;
                 display: flex;
+                font-weight: 400;
+                cursor: pointer;
 
                 &.ancestor-cell {
                     color: $accent-mid;

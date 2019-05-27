@@ -68,7 +68,8 @@ export class DatatableService {
         const dataset: DataSet = {id, name, type, systems, fields: newFields};
         this.dataSets.push(dataset);
       }
-      this.cellManagement.buildInputObject(newFields);
+      // this.cellManagement._makeInputObject(newFields);
+      // this.cellManagement.buildInputObject(newFields);
     }
   }
 
