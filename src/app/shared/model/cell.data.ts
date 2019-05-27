@@ -25,6 +25,8 @@ export interface Field extends Base {
     dataType: string;
     length: number;
     businessProcesses: Array<BusinessProcess>;
+    formulat?: string;
+    dependsOn?: Step[] | FormulaDependency[];
 }
 
 export interface FormulaDependency {
