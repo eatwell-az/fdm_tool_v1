@@ -149,24 +149,34 @@
             background-color: $accent-mid;
             color: white;
             display: grid;
-            grid-template-rows: 50px;
-            transition: width 0.5s ease;
-            button.input-cell {
+            grid-template-rows: 46px;
+            transition-property: width;
+            transition-duration: 0.5s;
+            transition-timing-function: ease-out;
+            width: 100%;
+            .input-cell {
                 padding: 5px;
                 background-color: $primary-foreground;
                 border: 2px solid $accent-mid;
-                height: 50px;
+                height: 48px;
                 box-sizing: border-box;
                 display: flex;
                 font-weight: 400;
                 cursor: pointer;
-
+                width: 100%;
+                transition-property: width;
+                transition-duration: 0.5s;
+                transition-timing-function: ease-out;
                 &.ancestor-cell {
                     color: $accent-mid;
                     border: 2px solid $accent-light;
+                    transition-property: width;
+                    transition-duration: 0.5s;
+                    transition-timing-function: ease-out;
                 }
                 & > .cell-icon {
                     color: $accent-light;
+
                 }
             }
         }

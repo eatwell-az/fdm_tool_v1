@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as json from '../../data/SampleData.json';
-import { BusinessProcess, System, DataSet, Field } from '../shared/model/cell.data';
+import { BusinessProcess, System, DataSet, Field, FormulaField } from '../shared/model/cell.data';
 import { CellTableManagementService } from './cell-table-management.service.js';
 
 @Injectable({
@@ -68,8 +68,6 @@ export class DatatableService {
         const dataset: DataSet = {id, name, type, systems, fields: newFields};
         this.dataSets.push(dataset);
       }
-      // this.cellManagement._makeInputObject(newFields);
-      // this.cellManagement.buildInputObject(newFields);
     }
   }
 
@@ -88,5 +86,4 @@ export class DatatableService {
 
     return fields;
   }
-
 }

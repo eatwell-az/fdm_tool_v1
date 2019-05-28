@@ -25,8 +25,9 @@ export interface Field extends Base {
     dataType: string;
     length: number;
     businessProcesses: Array<BusinessProcess>;
-    formulat?: string;
-    dependsOn?: Step[] | FormulaDependency[];
+
+    formula?: string;
+    dependsOn?: FormulaDependency[];
 }
 
 export interface FormulaDependency {
@@ -45,13 +46,14 @@ export interface FormulaField extends Field {
     dependsOn: FormulaDependency[];
 }
 export interface InputRow {
-    field: Field;
+    field: Field | FormulaField;
     id: number;
     sortOrder: number;
     cleanseOperations: CleanseOperation[];
     currentValue: any;
     steps: Step[];
     type: RowType;
+    cssGridColumns?: string;
 }
 export enum RowType {
     Input,
