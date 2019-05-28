@@ -6,3 +6,36 @@
     font-size: 14px;
     padding: 20px;
 }
+
+/deep/ .mat-dialog-container {
+    border: 1px solid $accent;
+}
+/deep/ .mat-dialog-title {
+    display: flex !important;
+    flex-direction: row;
+
+    .dialog-icon {
+        color: $accent-mid;
+        display: inline;
+        font-size: 24px;
+        align-self: flex-start;
+        position: relative;
+        top: 5px;
+    }
+
+    .function-dialog-heading {
+        color: $accent-mid;
+        font-weight: 400;
+        align-self: flex-start;
+        flex-grow: 2;
+    }
+
+    .close-icon {
+        align-self: flex-end;
+    }
+}
+
+/deep/ .header-main {
+    background: $primary;
+    color: $accent;
+}

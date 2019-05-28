@@ -6,12 +6,12 @@
           <div class="tools-header">
           </div>
           <button mat-flat-button type="button" (click)="drawer.toggle()" class="tools-button">
-            <mat-icon *ngIf="drawerIsOpen">close</mat-icon>
-            <mat-icon *ngIf="!drawerIsOpen">build</mat-icon>
+            <mat-icon class="toolbox-icon" *ngIf="drawerIsOpen">close</mat-icon>
+            <mat-icon class="toolbox-icon" *ngIf="!drawerIsOpen">build</mat-icon>
           </button> 
         </div>
         <div class="input-wrapper" *ngFor="let inputRow of inputObject.rows" style="display: grid; grid-template-columns: auto 65px;">
-          <div  class="input-rows" [style]="'grid-template-columns:' + inputRow.cssGridColumns | safe: 'style'">
+          <div class="input-rows" [style]="'grid-template-columns:' + inputRow.cssGridColumns | safe: 'style'">
             <button [@columnState]="state" mat-flat-button class="input-cell" *ngFor="let step of inputRow.steps; index as i" [style]="step.style + step.startColumn + ' / ' + step.endColumn | safe: 'style'" [ngClass]="{'ancestor-cell': i !== inputRow.steps.length - 1}" (click)="makeNewFormulaRow(step, inputRow)">
               <span class="cell-label">{{step.postStep}}</span>&nbsp;
               <mat-icon class="cell-icon" *ngIf="step.stepIcon">{{step.stepIcon.materialIconName}}</mat-icon>
@@ -30,7 +30,7 @@
                   <mat-icon [ngClass]="{'cleanse-option-disabled': cleanseOperation.isApplied}">{{cleanseOperation.icon}}</mat-icon>
                 </button>
               </mat-menu>
-              <button mat-icon-button [matMenuTriggerFor]="cleanseMenu">
+              <button class="tool-menu-button" mat-flat-button [matMenuTriggerFor]="cleanseMenu">
                 <mat-icon>more_vert</mat-icon>
               </button>
             </div>

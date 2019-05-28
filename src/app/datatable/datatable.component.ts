@@ -15,13 +15,12 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
   animations: [
     trigger('columnState', [
       state('columnAdded', style({
-        backgroundColor: 'white'
+        // transform: 'scaleX(0.2)'
       })),
       state('columnReady', style({
-        backgroundColor: 'white'
-      })), 
-      transition('columnAdded => columnReady', animate(300)),
-      transition('columnReady => columnAdded', animate(800))
+        // transform: 'scaleX(0.5)'
+      })),
+      transition('columnAdded <=> columnReady', animate(300))
     ])
   ],
   providers: [ MatDialog, SafePipe ]
@@ -96,7 +95,7 @@ export class DatatableComponent implements OnInit {
 
   openDialog(): void {
     const dialogRef = this.dialog.open(FunctionDialogComponent, {
-      width: '250px',
+      width: '850px',
       data: {}
     });
 

@@ -1,8 +1,13 @@
-<h1 mat-dialog-title>Title here...</h1>
+<div mat-dialog-title>
+  <div class="mat-dialog-title">
+    <mat-icon class="dialog-icon">functions</mat-icon>
+    <span class="function-dialog-heading">Insert Function</span>
+    <button mat-icon-button (click)="onCancel()" class="close-icon"><mat-icon class="dialog-icon">close</mat-icon></button>
+  </div>
+</div>
 <div mat-dialog-content>
-
-  function content here...
+  
 </div>
 <div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">OK</button>
+  <button mat-flat-button (click)="onNoClick()" color="$primary">Insert Function</button>
 </div>
