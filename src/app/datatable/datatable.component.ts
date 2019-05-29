@@ -7,6 +7,7 @@ import { CleanseOperation } from '../shared/model/cleanse.operation';
 import { SafePipe } from '../pipes/safe.pipe';
 import { CellTableManagementService } from '../services/cell-table-management.service';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-datatable',
@@ -88,9 +89,7 @@ export class DatatableComponent implements OnInit {
   }
 
   onRowGridColumnChanged(cssColumnData: any) {
-    console.log(cssColumnData);
     this.state === 'columnAdded' ? this.state = 'columnReady' : this.state = 'columnAdded';
-    console.log(this.state);
   }
 
   openDialog(): void {

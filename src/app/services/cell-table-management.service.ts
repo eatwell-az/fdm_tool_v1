@@ -13,7 +13,7 @@ import {
 import { CLEANSE_OPERATIONS, CleanseOperation, CleanseOption } from '../shared/model/cleanse.operation';
 import { NewStepPackage } from '../datatable/datatable.component';
 import { Subject } from 'rxjs';
-
+import * as _ from 'lodash';
 @Injectable({
   providedIn: 'root'
 })
@@ -32,6 +32,11 @@ export class CellTableManagementService {
     const maxWidth = 814;
 
     const columnsPercentArr: number[] = [];
+    _.forEach(this.inputObject.rows, (value) => {
+      if (value.steps.length > this.currentStepCount) {
+        this.createNewColumn();
+      }
+    });
     for (let i = 0; i < this.currentStepCount; i++) {
       columnsPercentArr.push(maxWidth / this.currentStepCount / (maxWidth / 100));
     }
@@ -55,7 +60,6 @@ export class CellTableManagementService {
         cssTransitionArr[i] -= 1;
         cssTransitionArr[cssTransitionArr.length - 1] += 1;
         cssGridColumnValue = cssTransitionArr.join('% ') + '%';
-        // console.log(cssGridColumnValue);
         if (cssTransitionArr[i] === count) {
           clearInterval(animate);
         }
@@ -64,8 +68,7 @@ export class CellTableManagementService {
     return cssGridColumnValue;
 
   }
-
-  groomGrid(inputRow: InputRow) {
+/*   groomGrid(inputRow: InputRow) {
     this.rowStepsToColumnsStatus(inputRow);
 
     for (let i = 0; i < this.inputObject.rows.length; i++) {
@@ -74,9 +77,14 @@ export class CellTableManagementService {
         this.rowStepsToColumnsStatus(this.inputObject.rows[i]);
       }
     }
+  } */
+  groomGrid() {
+    for (let i = 0; i < this.inputObject.rows.length; i++) {
+      this.gridTemplateColumnCss(this.inputObject.rows[i]);
+    }
   }
 
-  slottedStep(row: InputRow) {
+/*   slottedStep(row: InputRow) {
     for (let i = 0; i < row.steps.length; i++) {
       if (row.type === RowType.Formula) {
         row.steps[i].startColumn = row.field.dependsOn[0].step.startColumn;
@@ -95,28 +103,31 @@ export class CellTableManagementService {
     step.endColumn = this.currentStepCount + 1;
   }
 
-  rowStepsToColumnsStatus(inputRow: InputRow) {
+  rowStepsToColumnsStatus() {
+    for (let row of this.inputObject.rows) {
+
+    }
     if (inputRow.steps.length > this.currentStepCount) {
       this.createNewColumn(inputRow);
     }
     this.slottedStep(inputRow);
-  }
-  createNewColumn(inputRow) {
+  } */
+  createNewColumn() {
     this.currentStepCount++;
   }
 
-  makeNewStep(inputRow: InputRow, icon: Icon): Step {
+  makeNewStep(inputRow: InputRow, icon: Icon, parentRow?: InputRow): Step {
     let startColumn: number, endColumn: number;
     const stepPackage = this.makeNewStepPackage(inputRow, icon);
     const appliedToStep: Step  = {
         id: inputRow.steps.length,
         type: icon.name,
-        operationSourceId: 0,
+        operationSourceId: parentRow ? parentRow.id : 0,
         preStep: '',
         style: '',
-        startColumn: 1,
-        endColumn: 2,
-
+        startColumn: (inputRow.type === RowType.Formula  && parentRow ? parentRow.steps[parentRow.steps.length - 1].startColumn : 1),
+        endColumn: this.currentStepCount,
+        isPlaceholder: (icon.name === 'placeholder' ? true : false),
         postStep: inputRow.currentValue,
         sortOrder: inputRow.steps.length,
         stepIcon: icon
@@ -136,8 +147,8 @@ export class CellTableManagementService {
       } else {
         const field: Field | FormulaField = inputRow.field;
         field.formula = '';
-        startColumn = field.dependsOn[0].step.startColumn;
-        endColumn = field.dependsOn[0].step.endColumn;
+        startColumn = parentRow.steps[parentRow.steps.length - 1].startColumn;
+        endColumn = this.currentStepCount;
       }
     } else {
       startColumn = inputRow.steps.length + 1;
@@ -154,9 +165,10 @@ export class CellTableManagementService {
       startColumn,
       endColumn,
       type: icon.type,
-      stepIcon: icon
+      stepIcon: icon,
+      isPlaceholder: appliedToStep.isPlaceholder
     };
-
+    
     return step;
   }
 
@@ -167,7 +179,7 @@ export class CellTableManagementService {
       inputRowId: id,
       stepType: icon.type,
       data: icon,
-      appliedToStep: icon.type === 'INPUT' ? null : steps[steps.length - 1]
+      appliedToStep: (icon.type === 'INPUT' ? null : steps[steps.length - 1])
     };
 
     return newStepPackage;
@@ -186,48 +198,72 @@ export class CellTableManagementService {
     return cleanseOptions;
   }
 
-  makeNewFormulaField(inputRow: InputRow, stepIcon: Icon) {
-    let icon = stepIcon;
-    if (stepIcon.type === 'FORMULA') {
-      icon = ICONS.find(i => i.name === 'formula');
+  updateFieldDependency(childRow: InputRow, parentRow: InputRow) {
+
+    function highestOrder (dependencies: FormulaDependency, currentDependency: FormulaDependency) {
+      return dependencies.order < currentDependency.order ? currentDependency : null;
     }
-    const {id, dataType, length, businessProcesses} = inputRow.field;
-    const name = 'FUNC_' + inputRow.field.name;
-    const dependency: FormulaDependency = {
+
+    const bindChildToParent: FormulaDependency = {
+      order: parentRow.field.dependsOn.reduce(highestOrder).order + 1,
+      row: childRow
+    };
+    parentRow.field.dependsOn.push(bindChildToParent);
+
+    const bindParentToChild: FormulaDependency = {
       order: 1,
-      row: inputRow,
-      step: inputRow.steps[inputRow.steps.length - 1]
+      row: parentRow
+    }
+    childRow.field.dependsOn.push(bindParentToChild);
+    return;
+  }
+
+  makeNewFormulaRow(parentRow: InputRow, stepIcon: Icon, order?: number) {
+    const {id, dataType, length, businessProcesses} = parentRow.field;
+
+    const childField: FormulaField = {
+      id, name, dataType, length, businessProcesses,
+      formula: '100 * ' + parentRow.field.name,
+      dependsOn: []
     };
-    const field: FormulaField = {id, name, dataType, length, businessProcesses,
-      formula: '100 * ' + inputRow.field.name,
-      dependsOn: [dependency]
-    };
-    field.id = field.id + 100;
-    const formulaRow = this.makeNewInputRow(field, RowType.Formula, icon);
-    this.inputObject.rows.push(formulaRow);
+
+    childField.id = childField.id + 100;
+
+    const childRow = this.makeNewInputRow(childField, RowType.Formula, stepIcon, parentRow);
+    this.updateFieldDependency(childRow, parentRow);
+    this.inputObject.rows.push(childRow);
+    return;
   }
 
   updateInputRow(inputRow: InputRow, stepIcon) {
+    let newStepIcon: Icon;
+
+    if (stepIcon.type === 'FORMULA') {
+        this.makeNewFormulaRow(inputRow, stepIcon);
+        return;
+    }
     for (let i = 0; i < this.inputObject.rows.length; i++) {
       if (inputRow.id === this.inputObject.rows[i].id) {
-        const newStep = this.makeNewStep(inputRow, stepIcon);
+        newStepIcon = stepIcon;
         for (const cleanseOption of this.inputObject.rows[i].cleanseOperations) {
-          if (cleanseOption.name === stepIcon.name) {
+          if (cleanseOption.name === newStepIcon.name) {
             cleanseOption.isApplied = true;
           }
         }
+      } else {
 
+        newStepIcon = ICONS.find(icon => icon.name === 'placeholder');
+        const newStep = this.makeNewStep(this.inputObject.rows[i], newStepIcon);
         this.inputObject.rows[i].steps.push(newStep);
-        if (stepIcon.type === 'FORMULA') {
-          this.makeNewFormulaField(inputRow, stepIcon);
-        }
-        this.groomGrid(inputRow);
+
       }
     }
+
+    this.groomGrid();
   }
 
-  makeNewInputRow(field: Field | FormulaField, type: RowType, icon?: Icon): InputRow {
-    const inputRow: InputRow = {
+  makeNewInputRow(field: Field | FormulaField, type: RowType, icon?: Icon, parent?: InputRow): InputRow {
+    const newInputRow: InputRow = {
         field,
         id: field.id,
         currentValue: field.name,
@@ -237,9 +273,9 @@ export class CellTableManagementService {
         type,
         cssGridColumns: '100%'
       };
-      const step = this.makeNewStep(inputRow, icon);
-      inputRow.steps.push(step);
-    return inputRow;
+      const step = this.makeNewStep(newInputRow, icon);
+      newInputRow.steps.push(step);
+    return newInputRow;
   }
 
   makeInputObject(fields: Field[]) {

@@ -33,7 +33,6 @@ export interface Field extends Base {
 export interface FormulaDependency {
     order: number;
     row: InputRow;
-    step?: Step;
 }
 
 export interface FormulaField extends Field {
@@ -70,6 +69,7 @@ export interface Step {
     postStep: any;
     sortOrder: number;
     stepIcon: Icon;
+    isPlaceholder: boolean;
 }
 
 export interface InputObject {
@@ -86,10 +86,11 @@ export interface Icon {
 export const ICONS: Icon[] = [
     { name: 'round', materialIconName: 'all_out', style: '', type: 'CLEANSING' },
     { name: 'trim', materialIconName: 'crop', style: '', type: 'CLEANSING' },
-    { name: 'case', materialIconName: 'case', style: '', type: 'CLEANSING' },
+    { name: 'case', materialIconName: 'text_format', style: '', type: 'CLEANSING' },
     { name: 'input', materialIconName: 'input', style: '', type: 'INPUT' },
     { name: 'formula', materialIconName: 'functions', style: '', type: 'FORMULA' },
-    { name: 'dependent', materialIconName: 'device_hub', style: '', type: 'FORMULA' }
+    { name: 'dependent', materialIconName: 'device_hub', style: '', type: 'FORMULA' },
+    { name: 'placeholder', materialIconName: '', style: '', type: 'PLACEHOLDER' }
 ];
 
 export const TOOLTIP_OBJECT = {
