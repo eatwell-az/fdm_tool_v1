@@ -33,6 +33,7 @@ import { ToolCellComponent } from './datatable/tool-cell/tool-cell.component';
 import { FunctionDialogComponent } from './function-dialog/function-dialog.component';
 import { CellTableManagementService } from './services/cell-table-management.service';
 import { SafePipe } from './pipes/safe.pipe';
+import { SnackbarComponent } from './snackbar/snackbar.component';
 
 
 @NgModule({
@@ -55,9 +56,10 @@ import { SafePipe } from './pipes/safe.pipe';
     OutputCellComponent,
     ToolCellComponent,
     FunctionDialogComponent,
-    SafePipe
+    SafePipe,
+    SnackbarComponent
   ],
-  entryComponents: [FunctionDialogComponent],
+  entryComponents: [FunctionDialogComponent, SnackbarComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

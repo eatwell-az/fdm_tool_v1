@@ -25,7 +25,7 @@
                   [matTooltip]="tooltipObj.cleanseTooltip[cleanseOperation.name]"
                   matTooltipPosition="left"
                   [matTooltipClass]="{'toolbox-tooltip cleanse-tooltip': true}"
-                  (click)="applyCleanse(cleanseOperation, inputRow)"
+                  (click)="applyCleanse(cleanseOperation, inputRow, inputRow.steps[inputRow.steps.length - 1])"
                   [disabled]="cleanseOperation.isApplied">
                   <mat-icon [ngClass]="{'cleanse-option-disabled': cleanseOperation.isApplied}">{{cleanseOperation.icon}}</mat-icon>
                 </button>

@@ -1,13 +1,14 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DatatableService } from '../services/datatable.service';
-import { DataSet, Field, InputRow, InputObject, Step, ICONS } from '../shared/model/cell.data';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTooltip } from '@angular/material';
+import { DataSet, Field, InputRow, InputObject, Step, ICONS, Icon } from '../shared/model/cell.data';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTooltip, MatSnackBar } from '@angular/material';
 import { FunctionDialogComponent } from '../function-dialog/function-dialog.component';
 import { CleanseOperation } from '../shared/model/cleanse.operation';
 import { SafePipe } from '../pipes/safe.pipe';
 import { CellTableManagementService } from '../services/cell-table-management.service';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import * as _ from 'lodash';
+import { SnackbarComponent } from '../snackbar/snackbar.component';
 
 @Component({
   selector: 'app-datatable',
@@ -27,6 +28,7 @@ import * as _ from 'lodash';
   providers: [ MatDialog, SafePipe ]
 })
 export class DatatableComponent implements OnInit {
+  durationInSeconds = 5;
   state = 'columnAdded';
   inputTable: DataSet[];
   inputFields: Field[];
@@ -56,7 +58,8 @@ export class DatatableComponent implements OnInit {
     private datatableService: DatatableService,
     public cellManagement: CellTableManagementService,
     public dialog: MatDialog,
-    private safe: SafePipe) { }
+    private safe: SafePipe,
+    private _snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.inputTable = this.datatableService.dataSets.filter(inputTable => inputTable.type === 'FILE');
@@ -77,15 +80,25 @@ export class DatatableComponent implements OnInit {
     }
   }
 
-  makeNewFormulaRow(step: Step, inputRow: InputRow) {
-    const icon = ICONS.find(i => i.name === 'dependent');
-    this.cellManagement.updateInputRow(inputRow, icon);
+  openSnackBar(message: string) {
+    this._snackBar.openFromComponent(SnackbarComponent, {
+      duration: this.durationInSeconds * 1000,
+      data: message
+    });
   }
 
-  applyCleanse(cleanseOption: CleanseOperation, inputRow: InputRow) {
-    const currentRowValue = this.inputObject.rows.filter(row => row.id === inputRow.id);
-    const icon = ICONS.find(i => i.name === cleanseOption.name);
-    this.cellManagement.updateInputRow(inputRow, icon);
+  makeNewFormulaRow(step: Step, inputRow: InputRow) {
+    if (!step.isPlaceholder) {
+      const icon: Icon = ICONS.find(i => i.name === 'dependent');
+      this.cellManagement.updateInputRow(inputRow, icon, step);
+    } else {
+      this.openSnackBar('Placeholder cells cannot contain formulas');
+    }
+  }
+
+  applyCleanse(cleanseOption: CleanseOperation, inputRow: InputRow, step: Step) {
+    const icon: Icon = ICONS.find(i => i.name === cleanseOption.name);
+    this.cellManagement.updateInputRow(inputRow, icon, step);
   }
 
   onRowGridColumnChanged(cssColumnData: any) {

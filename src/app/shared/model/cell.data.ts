@@ -25,7 +25,6 @@ export interface Field extends Base {
     dataType: string;
     length: number;
     businessProcesses: Array<BusinessProcess>;
-
     formula?: string;
     dependsOn?: FormulaDependency[];
 }
