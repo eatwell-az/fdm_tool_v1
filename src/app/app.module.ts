@@ -34,7 +34,17 @@ import { FunctionDialogComponent } from './function-dialog/function-dialog.compo
 import { CellTableManagementService } from './services/cell-table-management.service';
 import { SafePipe } from './pipes/safe.pipe';
 import { SnackbarComponent } from './snackbar/snackbar.component';
-
+import { CoreModule } from './core/core.module';
+/* 
+TODO:
+- Implement a Core, Shared and Feature module usage (pluralsight)
+- prefixing selectors with identifyable feature, shared, core or app wide abbreviations. i.e. core-datatable
+- immutable data handling. this may be done during the application of NgRx
+- NgRx integration
+- 3 to 5 line functions
+- use of directives to help breakup large components
+- implement bundle size monitoring into a CICD process (webpack?) using npm: source-map-explorer
+*/
 
 @NgModule({
   declarations: [
@@ -68,7 +78,8 @@ import { SnackbarComponent } from './snackbar/snackbar.component';
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    !environment.production ? StoreDevtoolsModule.instrument({ maxAge: 50 }) : []
+    !environment.production ? StoreDevtoolsModule.instrument({ maxAge: 50 }) : [],
+    CoreModule
   ],
   providers: [DatatableService, CellTableManagementService],
   bootstrap: [AppComponent]

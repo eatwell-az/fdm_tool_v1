@@ -34,6 +34,9 @@ export class CellTableManagementService {
 
     const columnsPercentArr: number[] = [];
     _.forEach(this.inputObject.rows, (value) => {
+      if (row.type === RowType.Formula) {
+        
+      }
       if (value.steps.length > this.currentStepCount) {
         this.createNewColumn();
       }
@@ -46,9 +49,12 @@ export class CellTableManagementService {
     const columnsPercent = columnsPercentArr.join('% ') + '%';
     this.rowGridColumnChanged.next(columnsPercent);
     row.cssGridColumns = columnsPercent;
-
+    let columnWidth = 100;
     const cssTransitionArr: number[] = [];
-    const columnWidth = (814 / (this.currentStepCount - 1)) / (814 / 100);
+    if (this.currentStepCount - 1 > 0) {
+      columnWidth = (814 / (this.currentStepCount - 1)) / (814 / 100);
+    }
+
     for (let i = 0; i < columnsPercentArr.length; i++) {
       cssTransitionArr.push(columnWidth);
     }
@@ -87,13 +93,13 @@ export class CellTableManagementService {
     let stepId: number;
 
     if (isFormula() && parentRow) {
-        if (isPlaceholder()) {
-          startColumn = inputRow.steps[inputRow.steps.length - 1].endColumn;
-          endColumn = startColumn + 1;
-        } else {
-          startColumn = parentStep.startColumn;
-          endColumn = parentStep.endColumn;
-        }
+      if (isPlaceholder()) {
+        startColumn = inputRow.steps[inputRow.steps.length - 1].endColumn;
+        endColumn = startColumn + 1;
+      } else if (parentStep) {
+        startColumn = parentStep.endColumn;
+        endColumn = startColumn + 1;
+      }
     } else if (hasAppliedTo()) {
       startColumn = stepPackage.appliedToStep.endColumn;
       endColumn = startColumn + 1;
@@ -111,6 +117,7 @@ export class CellTableManagementService {
     } else {
       stepId = stepPackage.appliedToStep.id;
     }
+
     const appliedToStep: Step  = {
       id: inputRow.steps.length,
       type: icon.name,
@@ -120,10 +127,11 @@ export class CellTableManagementService {
       startColumn,
       endColumn,
       isPlaceholder: (icon.name === 'placeholder' ? true : false),
-      postStep: inputRow.currentValue,
+      postStep: (inputRow.currentValue === '' ? parentStep.postStep : inputRow.currentValue),
       sortOrder: inputRow.steps.length,
       stepIcon: icon
     };
+    console.log(inputRow, icon, parentRow, parentStep);
     const step: Step = {
       id: inputRow.steps.length,
       operationSourceId: appliedToStep.id,
@@ -164,20 +172,6 @@ export class CellTableManagementService {
       return {startColumn: oldPlaceholder.startColumn, endColumn: oldPlaceholder.endColumn};
     }
 
-    /* if (inputRow.steps.length === 0) {
-      if (inputRow.type !== RowType.Formula) {
-        startColumn = 1;
-        endColumn = 2;
-      } else {
-        const field: Field | FormulaField = inputRow.field;
-        field.formula = '';
-        startColumn = parentRow.steps[parentRow.steps.length - 1].startColumn;
-        endColumn = this.currentStepCount;
-      }
-    } else {
-      startColumn = inputRow.steps.length + 1;
-      endColumn = startColumn + 1;
-    } */
     return step;
   }
 
@@ -192,10 +186,10 @@ export class CellTableManagementService {
         if (icon.type === 'PLACEHOLDER') {
           appliedToStep = steps[steps.length - 1];
         } else {
-          appliedToStep = getMostRecentNonPlaceholderStep();
+          appliedToStep = getMostRecentNonPlaceholderStep(steps);
         }
       } else if (steps.length === 0 && icon.type === 'FORMULA' && parentRow) {
-        appliedToStep = getMostRecentNonPlaceholderStep();
+        appliedToStep = getMostRecentNonPlaceholderStep(steps);
       }
     }
 
@@ -207,13 +201,13 @@ export class CellTableManagementService {
       appliedToStep
     };
 
-    function getMostRecentNonPlaceholderStep(): Step | null {
+    function getMostRecentNonPlaceholderStep(_steps: Step[]): Step | null {
       let eligibleApplyToStep: Step;
 
       if (icon.type === 'FORMULA') {
-        eligibleApplyToStep = parentRow.steps.find(stp => stp.isPlaceholder === false);
+        eligibleApplyToStep = parentRow.steps.find(step => step.isPlaceholder === false);
       } else if (icon.type === 'CLEANSING') {
-        const eligibleApplyToSteps = steps.filter(step => step.isPlaceholder === false || step.isPlaceholder === undefined);
+        const eligibleApplyToSteps = _steps.filter(_step => _step.isPlaceholder === false || _step.isPlaceholder === undefined);
         eligibleApplyToStep = eligibleApplyToSteps[eligibleApplyToSteps.length - 1];
       } else if (icon.type === 'PLACEHOLDER') {
 
@@ -290,7 +284,10 @@ export class CellTableManagementService {
       }
     } else if (isParent()) {
       if (isCleansing(icon)) {
-        insertStep(this.makeNewStep(inputRow, icon, parentRow));
+        insertStep(this.makeNewStep(inputRow, icon, parentRow, step));
+      } else if (isFormula() && parentRow.steps[parentRow.steps.length - 1] === step) {
+        this.createNewColumn();
+        insertStep(this.makeNewStep(inputRow, icon, parentRow, step))
       }
     } else if (isCleansing(icon)) {
       insertStep(this.makeNewStep(inputRow, placeholderIcon));
@@ -345,10 +342,11 @@ export class CellTableManagementService {
   }
 
   updateInputRow(inputRow: InputRow, stepIcon: Icon, step?: Step) {
-
+/*     if (inputRow.steps[inputRow.steps.length - 1] === step) {
+      this.createNewColumn();
+    } */
     if (stepIcon.type === 'FORMULA') {
         this.makeNewFormulaRow(inputRow, stepIcon, step);
-        return;
     }
     for (let i = 0; i < this.inputObject.rows.length; i++) {
       if (inputRow.id === this.inputObject.rows[i].id) {
@@ -357,8 +355,8 @@ export class CellTableManagementService {
         }
       }
       this.placeholderOrNewColumn(this.inputObject.rows[i], stepIcon, step, inputRow);
-      this.groomGrid();
     }
+    this.groomGrid();
   }
 
   makeNewInputRow(field: Field | FormulaField, type: RowType, icon?: Icon, parentRow?: InputRow, parentStep?: Step): InputRow {

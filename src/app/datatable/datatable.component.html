@@ -11,9 +11,9 @@
           </button> 
         </div>
         <div class="input-wrapper" *ngFor="let inputRow of inputObject.rows" style="display: grid; grid-template-columns: auto 65px;">
-          <div class="input-rows" [style]="'grid-template-columns:' + inputRow.cssGridColumns | safe: 'style'">
-            <button [@columnState]="state" mat-flat-button class="input-cell" *ngFor="let step of inputRow.steps; index as i" [style]="step.style + step.startColumn + ' / ' + step.endColumn | safe: 'style'" [ngClass]="{'ancestor-cell': i !== inputRow.steps.length - 1}" (click)="makeNewFormulaRow(step, inputRow)">
-              <span class="cell-label" *ngIf="!step.isPlaceholder">{{step.postStep}}</span>&nbsp;
+          <div class="input-rows" [style]="'grid-template-columns:' + inputRow.cssGridColumns | safe: 'style'"><!--  -->
+            <button [@columnState]="state" mat-flat-button class="input-cell {{inputRow.type == 1 ? 'formula-row' : ''}}" *ngFor="let step of inputRow.steps; index as i" [style]="step.style + step.startColumn + ' / ' + step.endColumn | safe: 'style'" [ngClass]="{'ancestor-cell': i !== inputRow.steps.length - 1}" (click)="makeNewFormulaRow(step, inputRow)">
+              <span class="cell-label {{step.stepIcon.materialIconName}}" *ngIf="!step.isPlaceholder">{{step.postStep}}</span>&nbsp;
               <mat-icon class="cell-icon" *ngIf="step.stepIcon">{{step.stepIcon.materialIconName}}</mat-icon>
             </button>
           </div>

@@ -139,8 +139,6 @@
             .tools-header {
                 height: 40px;
                 background-color: $accent;
-
-                
             }
             .tools-button {
                 margin-top: 10px;
@@ -180,8 +178,14 @@
                     border: 2px solid $accent-mid;
                     background-color: $accent-light;
                 }
+                   
+                .device_hub {
+                    line-height: 28px;
+                    order: 1;
+                }
             }
         }
+        
         .tools-column, .tools-header {
             max-width: 65px;
             background-color: $primary;
@@ -216,4 +220,12 @@ button.mat-menu-item {
 /deep/ .toolbox-tooltip.cleanse-tooltip {
     background-color: $accent-mid;
     color: $primary-foreground !important;
+}
+
+/deep/ .formula-row .mat-button-wrapper {
+    display: flex;
+    flex-direction: row;
+    span:nth-child(1) {
+        line-height: 28px;
+    }
 }
